@@ -38,10 +38,12 @@ class _SellerCarFormState extends State<SellerCarForm> {
       if (provider.listUrls.isNotEmpty) {
         provider.dataToFirestore.addAll({
           'catName': provider.selectedCategory,
+          'subCat': provider.selectedSubCategory,
           'brand': _brandController.text,
           'year': _yearController.text,
           'price': _priceController.text,
           'fuel': _fuelController.text,
+          'transmission': _transmissionController.text,
           'kmDrive': _kmController.text,
           'no. of owners': _noOfOwnerController.text,
           'title': _titleController.text,
@@ -72,15 +74,53 @@ class _SellerCarFormState extends State<SellerCarForm> {
   final List<String> _transmission = ['Manually', 'Automatic'];
   final List<String> _noOfOwners = ['1', '2nd', '3rd', '4th', '4th+'];
 
-  @override
-  void initState() {
-    _service.getUserData().then((value) {
-      setState(() {
-        _addressController.text = value['address'];
-      });
-    });
+  // @override
+  // void initState() {
+  //   _service.getUserData().then((value) {
+  //     setState(() {
+  //       _addressController.text = value['address'];
+  //     });
+  //   });
 
-    super.initState();
+  //   super.initState();
+  // }
+
+  @override
+  void didChangeDependencies() {
+    var _catProvider = Provider.of<CategoryProvider>(context);
+    setState(() {
+      _brandController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['brand'];
+      _yearController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['year'];
+      _priceController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['price'];
+      _fuelController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['fuel'];
+      _transmissionController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['transmission'];
+      _kmController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['kmDrive'];
+      _noOfOwnerController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['no. of owners'];
+      _titleController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['title'];
+      _descriptionController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['description'];
+      _addressController.text = _catProvider.dataToFirestore.isEmpty
+          ? null
+          : _catProvider.dataToFirestore['address'];
+    });
+    super.didChangeDependencies();
   }
 
   @override
@@ -366,26 +406,6 @@ class _SellerCarFormState extends State<SellerCarForm> {
                   const Divider(
                     color: Colors.grey,
                   ),
-                  TextFormField(
-                    enabled: false,
-                    controller: _addressController,
-                    minLines: 2,
-                    maxLines: 4,
-                    decoration: const InputDecoration(
-                      labelText: 'Address*',
-                      counterText: 'Seller Address',
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please complete required field.';
-                      }
-                      return null;
-                    },
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                  ),
-                  //if(_catProvider.listUrls.isNotEmpty)
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(

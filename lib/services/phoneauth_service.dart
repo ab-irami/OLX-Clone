@@ -24,7 +24,8 @@ class PhoneAuthService {
       return users.doc(user?.uid).set({
         'uid': user?.uid,
         'mobile': user?.phoneNumber,
-        'email': user?.email
+        'email': user?.email,
+        'name': null,
       }).then((value) {
         Navigator.pushReplacementNamed(context, LocationScreen.id);
       }).catchError((error) => print("Failed to add user: $error"));

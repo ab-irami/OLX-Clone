@@ -7,8 +7,8 @@ import 'package:geocoding/geocoding.dart' as geocode;
 class FirebaseService {
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  CollectionReference categories =
-      FirebaseFirestore.instance.collection('categories');
+  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
+  CollectionReference products = FirebaseFirestore.instance.collection('products');
 
   Future<void> updateUser(Map<String, dynamic> data, context) {
     return users

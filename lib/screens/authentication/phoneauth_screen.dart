@@ -45,9 +45,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 40.0,
-            ),
+            const SizedBox(height: 40.0),
             CircleAvatar(
               radius: 30.0,
               backgroundColor: Colors.red.shade200,
@@ -57,9 +55,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                 size: 40.0,
               ),
             ),
-            const SizedBox(
-              height: 12.0,
-            ),
+            const SizedBox(height: 12.0),
             const Text(
               'Enter your Phone',
               style: TextStyle(
@@ -67,9 +63,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(
-              height: 10.0,
-            ),
+            const SizedBox(height: 10.0),
             const Text(
               'We will send the confirmation code to your phone',
               style: TextStyle(
@@ -89,9 +83,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10.0,
-                ),
+                const SizedBox(width: 10.0),
                 Expanded(
                   flex: 3,
                   child: TextFormField(
