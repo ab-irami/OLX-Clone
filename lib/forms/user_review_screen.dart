@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_app/provider/cat_provider.dart';
+import 'package:ecom_app/screens/location_screen.dart';
 import 'package:ecom_app/screens/main_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:email_validator/email_validator.dart';
@@ -27,19 +29,6 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
 
   bool _loading = false;
 
-  @override
-  void didChangeDependencies() {
-    var _provider = Provider.of<CategoryProvider>(context);
-    _provider.getUserDetails();
-    setState(() {
-      _nameController.text = _provider.userDetails['name'];
-      _phoneController.text = _provider.userDetails['mobile'];
-      _emailController.text = _provider.userDetails['email'];
-      _addressController.text = _provider.userDetails['address'];
-    });
-    super.didChangeDependencies();
-  }
-
   Future<void> updateUser(provider, Map<String, dynamic> data, context) {
     return _service.users
         .doc(_service.user?.uid)
@@ -57,11 +46,17 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
 
   Future<void> saveProductToDB(CategoryProvider provider, context) {
     return _service.products
-        .doc(_service.user?.uid)
-        .set(provider.dataToFirestore)
-        .then((value) {})
-        .catchError((error) {
-      print('Firebase_service - $error');
+        .add(provider.dataToFirestore)
+        .then((value) {
+      provider.clearData();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'We have received your products and will notify you once get approved.'),
+        ),
+      );
+      Navigator.pushReplacementNamed(context, MainScreen.id);
+    }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to update location'),
@@ -132,25 +127,20 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
                             color: Theme.of(context).primaryColor,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _loading = true;
-                            });
                             updateUser(
                               _provider,
                               {
                                 'contactDetails': {
-                                  'name': _nameController.text,
                                   'contactNumber': _phoneController.text,
                                   'contactEmail': _emailController.text,
-                                }
+                                },
+                                'name': _nameController.text,
                               },
                               context,
                             ).then((value) {
                               setState(() {
                                 _loading = false;
                               });
-                              Navigator.pushReplacementNamed(
-                                  context, MainScreen.id);
                             });
                           },
                           child: const Text(
@@ -194,131 +184,178 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
       ),
       body: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+        child: FutureBuilder<DocumentSnapshot>(
+          future: _service.getUserData(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return const Text("Something went wrong");
+            }
+
+            if (snapshot.hasData && !snapshot.data!.exists) {
+              return const Text("Document does not exist");
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).primaryColor,
+                  ),
+                ),
+              );
+            }
+
+            _nameController.text = snapshot.data!['name'];
+            _phoneController.text = snapshot.data!['mobile'].subString(3);
+            _emailController.text = snapshot.data!['email'];
+            _addressController.text = snapshot.data!['address'];
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: 40.0,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.blue.shade50,
-                        radius: 38,
-                        child: Icon(
-                          CupertinoIcons.person_alt,
-                          color: Colors.red.shade300,
-                          size: 60.0,
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 40.0,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.blue.shade50,
+                            radius: 38,
+                            child: Icon(
+                              CupertinoIcons.person_alt,
+                              color: Colors.red.shade300,
+                              size: 60.0,
+                            ),
+                          ),
                         ),
+                        const SizedBox(width: 10.0),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _nameController,
+                            decoration: const InputDecoration(
+                              labelText: 'Your name',
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Enter your name';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 30.0),
+                    const Text(
+                      'Contact Details',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(width: 10.0),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _nameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Your name',
+                    const SizedBox(height: 10.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: TextFormField(
+                            controller: _countryCodeController,
+                            enabled: false,
+                            decoration: const InputDecoration(
+                              labelText: 'Country',
+                              helperText: '',
+                            ),
+                          ),
                         ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Enter your name';
-                          } else {
-                            return null;
-                          }
-                        },
+                        const SizedBox(width: 10.0),
+                        Expanded(
+                          flex: 3,
+                          child: TextFormField(
+                            controller: _phoneController,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Contact Number',
+                              helperText: 'Enter your mobile number',
+                            ),
+                            maxLength: 10,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Enter mobile number';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30.0),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        helperText: 'Enter your Email',
                       ),
-                    )
+                      validator: (value) {
+                        final bool isValid =
+                            EmailValidator.validate(_emailController.text);
+                        if (value == null || value.isEmpty) {
+                          return 'Enter Email';
+                        }
+                        if (value.isNotEmpty && isValid == false) {
+                          return 'Enter valid Email';
+                        }
+                        return null;
+                      },
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            enabled: false,
+                            controller: _addressController,
+                            minLines: 2,
+                            maxLines: 4,
+                            decoration: const InputDecoration(
+                              labelText: 'Address*',
+                              helperText: 'Contact address',
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please complete required field.';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 14,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const LocationScreen(
+                                  popScreen: UserReviewScreen.id,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                const SizedBox(height: 30.0),
-                const Text(
-                  'Contact Details',
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10.0),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: TextFormField(
-                        controller: _countryCodeController,
-                        enabled: false,
-                        decoration: const InputDecoration(
-                          labelText: 'Country',
-                          helperText: '',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    Expanded(
-                      flex: 3,
-                      child: TextFormField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Contact Number',
-                          helperText: 'Enter your mobile number',
-                        ),
-                        maxLength: 10,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Enter mobile number';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30.0),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    helperText: 'Enter your Email',
-                  ),
-                  validator: (value) {
-                    final bool isValid =
-                        EmailValidator.validate(_emailController.text);
-                    if (value == null || value.isEmpty) {
-                      return 'Enter Email';
-                    }
-                    if (value.isNotEmpty && isValid == false) {
-                      return 'Enter valid Email';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  enabled: false,
-                  controller: _addressController,
-                  minLines: 2,
-                  maxLines: 4,
-                  decoration: const InputDecoration(
-                    labelText: 'Address*',
-                    helperText: 'Contact address',
-                    suffixIcon: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 12.0,
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please complete required field.';
-                    }
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
       bottomSheet: Padding(

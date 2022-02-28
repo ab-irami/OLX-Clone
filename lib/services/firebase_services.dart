@@ -10,11 +10,11 @@ class FirebaseService {
   CollectionReference categories = FirebaseFirestore.instance.collection('categories');
   CollectionReference products = FirebaseFirestore.instance.collection('products');
 
-  Future<void> updateUser(Map<String, dynamic> data, context) {
+  Future<void> updateUser(Map<String, dynamic> data, context, screen) {
     return users
         .doc(user?.uid)
         .update(data)
-        .then((value) => Navigator.pushReplacementNamed(context, MainScreen.id))
+        .then((value) => Navigator.pushReplacementNamed(context, screen))
         .catchError((error) {
       print('Firebase_service - $error');
       ScaffoldMessenger.of(context).showSnackBar(

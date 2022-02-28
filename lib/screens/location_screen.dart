@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_app/screens/home_screen.dart';
 import 'package:ecom_app/screens/main_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,11 +12,11 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:geocoding/geocoding.dart' as geocode;
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({Key? key, this.locationChanging}) : super(key: key);
+  const LocationScreen({Key? key, this.popScreen}) : super(key: key);
 
   static const String id = 'location_screen';
 
-  final bool? locationChanging;
+  final String? popScreen;
 
   @override
   State<LocationScreen> createState() => _LocationScreenState();
@@ -77,7 +78,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.locationChanging == null) {
+    if (widget.popScreen == null) {
       _service.users
           .doc(_service.user!.uid)
           .get()
@@ -182,10 +183,10 @@ class _LocationScreenState extends State<LocationScreen> {
                               'location':
                                   GeoPoint(value.latitude!, value.longitude!),
                               'address': _address,
-                            }, context).then((value) {
+                            }, context, widget.popScreen).then((value) {
                               progressDialog.dismiss();
-                              Navigator.pushReplacementNamed(
-                                  context, MainScreen.id);
+                              //Navigator.pushReplacementNamed(
+                                  //context, widget.popScreen!);
                             });
                           }
                         });
@@ -256,7 +257,7 @@ class _LocationScreenState extends State<LocationScreen> {
                               'state': stateValue,
                               'city': cityValue,
                               'country': countryValue,
-                            }, context);
+                            }, context, widget.popScreen);
                           }
                         },
                       ),
@@ -349,7 +350,7 @@ class _LocationScreenState extends State<LocationScreen> {
                                                 'location': GeoPoint(
                                                     value.latitude!,
                                                     value.longitude!)
-                                              }, context);
+                                              }, context, widget.popScreen);
                                             }
                                           });
                                         },

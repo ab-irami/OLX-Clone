@@ -43,4 +43,10 @@ class CategoryProvider with ChangeNotifier {
       notifyListeners();
     });
   }
+
+  clearData() {
+    listUrls = [];
+    dataToFirestore = {};
+    notifyListeners();
+  }
 }

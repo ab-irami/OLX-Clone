@@ -271,11 +271,15 @@ class _SellerCarFormState extends State<SellerCarForm> {
                   TextFormField(
                     autofocus: false,
                     controller: _priceController,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                         labelText: 'Price*', prefixText: 'Rs '),
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please complete required field.';
+                      }
+                      if (value.length < 5) {
+                        return 'Require minimum price';
                       }
                       return null;
                     },
@@ -381,6 +385,9 @@ class _SellerCarFormState extends State<SellerCarForm> {
                       if (value!.isEmpty) {
                         return 'Please complete required field.';
                       }
+                      if (value.length < 10) {
+                        return 'Needs atleast 15 characters';
+                      }
                       return null;
                     },
                   ),
@@ -396,6 +403,9 @@ class _SellerCarFormState extends State<SellerCarForm> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please complete required field.';
+                      }
+                      if (value.length < 40) {
+                        return 'Needs atleast 40 characters';
                       }
                       return null;
                     },

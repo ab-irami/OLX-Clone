@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_app/screens/home_screen.dart';
 import 'package:ecom_app/screens/location_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,7 +56,7 @@ class CustomAppBar extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (BuildContext context) => const LocationScreen(
-                locationChanging: true,
+                popScreen: HomeScreen.id,
               ),
             ),
           );

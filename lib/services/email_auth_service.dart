@@ -67,6 +67,7 @@ class EmailAuthentication {
           'email': userCredential.user?.email,
           'mobile': null,
           'name': null,
+          'address': null,
         }).then((value) async {
           await userCredential.user?.sendEmailVerification().then((value) {
             Navigator.pushReplacementNamed(context, EmailVerificationScreen.id);

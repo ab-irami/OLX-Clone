@@ -1,3 +1,4 @@
+import 'package:ecom_app/forms/forms_screen.dart';
 import 'package:ecom_app/forms/seller_car_form.dart';
 import 'package:ecom_app/forms/user_review_screen.dart';
 import 'package:ecom_app/provider/cat_provider.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
         SellerCarForm.id: (context) => const SellerCarForm(),
         ImagePickerWidget.id :(context) => const ImagePickerWidget(),
         UserReviewScreen.id :(context) => const UserReviewScreen(),
+        FormsScreen.id :(context) => const FormsScreen(),
       },
     );
   }
