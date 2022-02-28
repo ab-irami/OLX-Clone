@@ -1,5 +1,3 @@
-import 'package:ecom_app/screens/location_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ecom_app/widgets/auth_ui.dart';
 

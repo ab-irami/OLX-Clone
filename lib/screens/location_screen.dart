@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecom_app/screens/home_screen.dart';
 import 'package:ecom_app/screens/main_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';

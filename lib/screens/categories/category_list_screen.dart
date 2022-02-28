@@ -36,7 +36,7 @@ class CategoryListScreen extends StatelessWidget {
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
-                return Container(child: Center(child: Text('Error loading..\nContact developer')));
+                return Container(child: const Center(child: Text('Error loading..\nContact developer')));
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {

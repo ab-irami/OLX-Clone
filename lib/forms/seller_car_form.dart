@@ -74,17 +74,6 @@ class _SellerCarFormState extends State<SellerCarForm> {
   final List<String> _transmission = ['Manually', 'Automatic'];
   final List<String> _noOfOwners = ['1', '2nd', '3rd', '4th', '4th+'];
 
-  // @override
-  // void initState() {
-  //   _service.getUserData().then((value) {
-  //     setState(() {
-  //       _addressController.text = value['address'];
-  //     });
-  //   });
-
-  //   super.initState();
-  // }
-
   @override
   void didChangeDependencies() {
     var _catProvider = Provider.of<CategoryProvider>(context);
