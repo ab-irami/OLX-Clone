@@ -185,8 +185,6 @@ class _LocationScreenState extends State<LocationScreen> {
                               'address': _address,
                             }, context, widget.popScreen).then((value) {
                               progressDialog.dismiss();
-                              //Navigator.pushReplacementNamed(
-                                  //context, widget.popScreen!);
                             });
                           }
                         });

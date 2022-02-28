@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:ecom_app/screens/location_screen.dart';
 import 'package:ecom_app/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +15,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  var colorizeColors = [
+    Colors.grey,
+    Colors.cyan.shade900,
+  ];
+
+  var colorizeTextStyle = const TextStyle(fontSize: 30.0, fontFamily: 'Lato');
+
   @override
   void initState() {
     Timer(const Duration(seconds: 3), () {
@@ -30,6 +38,33 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: Colors.cyan,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'images/ecom_app_icon-transparent.png',
+              color: Colors.white,
+            ),
+            const SizedBox(height: 10.0),
+            AnimatedTextKit(
+              animatedTexts: [
+                ColorizeAnimatedText(
+                  'Buy & Sell',
+                  textStyle: colorizeTextStyle,
+                  colors: colorizeColors,
+                ),
+              ],
+              isRepeatingAnimation: true,
+              onTap: () {
+                print("Tap Event");
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

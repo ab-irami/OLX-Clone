@@ -17,6 +17,7 @@ import 'package:ecom_app/screens/main_screen.dart';
 import 'package:ecom_app/screens/my_ad_screen.dart';
 import 'package:ecom_app/screens/sell_items/seller_category_list_screen.dart';
 import 'package:ecom_app/screens/sell_items/seller_sub_cat_list_screen.dart';
+import 'package:ecom_app/screens/splash_screen.dart';
 import 'package:ecom_app/widgets/image_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,12 +44,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: LoginScreen.id,
+      initialRoute: SplashScreen.id,
       theme: ThemeData(
         primaryColor: Colors.cyan.shade900,
         fontFamily: 'Lato',
       ),
       routes: {
+        SplashScreen.id:(context) => const SplashScreen(),
         LoginScreen.id: (context) => const LoginScreen(),
         PhoneAuthScreen.id: (context) => const PhoneAuthScreen(),
         LocationScreen.id: (context) => const LocationScreen(),
