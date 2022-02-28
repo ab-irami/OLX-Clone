@@ -123,9 +123,7 @@ class _LocationScreenState extends State<LocationScreen> {
               builder: (context) {
                 return Column(
                   children: [
-                    const SizedBox(
-                      height: 26.0,
-                    ),
+                    const SizedBox(height: 26.0),
                     AppBar(
                       automaticallyImplyLeading: false,
                       iconTheme: const IconThemeData(
@@ -141,9 +139,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             },
                             icon: const Icon(Icons.clear),
                           ),
-                          const SizedBox(
-                            width: 10.0,
-                          ),
+                          const SizedBox(width: 10.0),
                           const Text(
                             'Location',
                             style: TextStyle(
@@ -278,9 +274,7 @@ class _LocationScreenState extends State<LocationScreen> {
           child: Column(
             children: [
               Image.asset('images/location_img.jpeg'),
-              const SizedBox(
-                height: 20.0,
-              ),
+              const SizedBox(height: 20.0),
               const Text(
                 'Where do you want\nto buy/sell products',
                 textAlign: TextAlign.center,
@@ -289,9 +283,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   fontSize: 25.0,
                 ),
               ),
-              const SizedBox(
-                height: 10.0,
-              ),
+              const SizedBox(height: 10.0),
               const Text(
                 'To enjoy all that we have to offer you\nwe need to know where to look for them.',
                 textAlign: TextAlign.center,
@@ -299,16 +291,12 @@ class _LocationScreenState extends State<LocationScreen> {
                   fontSize: 12.0,
                 ),
               ),
-              const SizedBox(
-                height: 30.0,
-              ),
+              const SizedBox(height: 30.0),
               _loading
                   ? Column(
                       children: const [
                         CircularProgressIndicator(),
-                        SizedBox(
-                          height: 8.0,
-                        ),
+                        SizedBox(height: 8.0),
                         Text('Finding location..'),
                       ],
                     )
@@ -341,16 +329,23 @@ class _LocationScreenState extends State<LocationScreen> {
                                         ),
                                         onPressed: () {
                                           progressDialog.show();
-                                          getLocation().then((value) {
-                                            if (value != null) {
-                                              _service.updateUser({
-                                                'address': _address,
-                                                'location': GeoPoint(
-                                                    value.latitude!,
-                                                    value.longitude!)
-                                              }, context, widget.popScreen);
-                                            }
-                                          });
+                                          getLocation().then(
+                                            (value) {
+                                              if (value != null) {
+                                                _service.updateUser(
+                                                  {
+                                                    'address': _address,
+                                                    'location': GeoPoint(
+                                                      value.latitude!,
+                                                      value.longitude!,
+                                                    )
+                                                  },
+                                                  context,
+                                                  widget.popScreen,
+                                                );
+                                              }
+                                            },
+                                          );
                                         },
                                         icon: const Icon(
                                           CupertinoIcons.location_fill,
