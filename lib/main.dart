@@ -2,6 +2,7 @@ import 'package:ecom_app/forms/forms_screen.dart';
 import 'package:ecom_app/forms/seller_car_form.dart';
 import 'package:ecom_app/forms/user_review_screen.dart';
 import 'package:ecom_app/provider/cat_provider.dart';
+import 'package:ecom_app/provider/product_provider.dart';
 import 'package:ecom_app/screens/account_screen.dart';
 import 'package:ecom_app/screens/authentication/email_auth_screen.dart';
 import 'package:ecom_app/screens/authentication/email_verification_screen.dart';
@@ -15,6 +16,7 @@ import 'package:ecom_app/screens/location_screen.dart';
 import 'package:ecom_app/screens/login_screen.dart';
 import 'package:ecom_app/screens/main_screen.dart';
 import 'package:ecom_app/screens/my_ad_screen.dart';
+import 'package:ecom_app/screens/product_details_screen.dart';
 import 'package:ecom_app/screens/sell_items/seller_category_list_screen.dart';
 import 'package:ecom_app/screens/sell_items/seller_sub_cat_list_screen.dart';
 import 'package:ecom_app/screens/splash_screen.dart';
@@ -29,7 +31,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        Provider(create: (_) => CategoryProvider()),
+        Provider (create: (_) => CategoryProvider()),
+        Provider (create: (_) => ProductProvider()),
       ],
       child: const MyApp(),
     ),
@@ -69,6 +72,7 @@ class MyApp extends StatelessWidget {
         ImagePickerWidget.id :(context) => const ImagePickerWidget(),
         UserReviewScreen.id :(context) => const UserReviewScreen(),
         FormsScreen.id :(context) => const FormsScreen(),
+        ProductDetailsScreen.id :(context) => const ProductDetailsScreen(),
       },
     );
   }

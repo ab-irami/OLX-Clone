@@ -183,7 +183,9 @@ class _FormsScreenState extends State<FormsScreen> {
                 if (_provider.selectedSubCategory == 'Accessories' ||
                     _provider.selectedSubCategory == 'Tablets' ||
                     _provider.selectedSubCategory ==
-                        'For Sale: House & Apartments' || _provider.selectedSubCategory == 'For Rent: House & Apartments')
+                        'For Sale: House & Apartments' ||
+                    _provider.selectedSubCategory ==
+                        'For Rent: House & Apartments')
                   InkWell(
                     onTap: () {
                       if (_provider.selectedSubCategory == 'Accessories') {
@@ -193,8 +195,9 @@ class _FormsScreenState extends State<FormsScreen> {
                         showFormDialog(_formClass.tablets, _typeController);
                       }
                       if (_provider.selectedSubCategory ==
-                          'For Sale: House & Apartments' || _provider.selectedSubCategory ==
-                          'For Rent: House & Apartments') {
+                              'For Sale: House & Apartments' ||
+                          _provider.selectedSubCategory ==
+                              'For Rent: House & Apartments') {
                         showFormDialog(
                             _formClass.apartmentType, _typeController);
                       }
@@ -208,7 +211,9 @@ class _FormsScreenState extends State<FormsScreen> {
                     ),
                   ),
                 if (_provider.selectedSubCategory ==
-                    'For Sale: House & Apartments' || _provider.selectedSubCategory == 'For Rent: House & Apartments')
+                        'For Sale: House & Apartments' ||
+                    _provider.selectedSubCategory ==
+                        'For Rent: House & Apartments')
                   Container(
                     child: Column(
                       children: [
@@ -324,9 +329,10 @@ class _FormsScreenState extends State<FormsScreen> {
                   minLines: 2,
                   maxLines: 30,
                   decoration: const InputDecoration(
-                      labelText: 'Description*',
-                      helperText:
-                          'Include condition, features, reason for selling'),
+                    labelText: 'Description*',
+                    helperText:
+                        'Include condition, features, reason for selling',
+                  ),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please complete required field.';

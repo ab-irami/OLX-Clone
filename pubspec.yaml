@@ -32,6 +32,7 @@ dependencies:
   firebase_storage: ^10.2.9
   galleryimage: ^1.1.0
   like_button: ^2.0.4
+  photo_view: ^0.12.0
 
 dev_dependencies:
   flutter_test:
