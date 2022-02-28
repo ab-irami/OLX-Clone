@@ -29,7 +29,6 @@ class _SellerCarFormState extends State<SellerCarForm> {
   final _noOfOwnerController = TextEditingController();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _addressController = TextEditingController();
 
   final String _address = '';
 
@@ -37,7 +36,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
     if (_formKey.currentState!.validate()) {
       if (provider.listUrls.isNotEmpty) {
         provider.dataToFirestore.addAll({
-          'catName': provider.selectedCategory,
+          'category': provider.selectedCategory,
           'subCat': provider.selectedSubCategory,
           'brand': _brandController.text,
           'year': _yearController.text,
@@ -48,9 +47,9 @@ class _SellerCarFormState extends State<SellerCarForm> {
           'no. of owners': _noOfOwnerController.text,
           'title': _titleController.text,
           'description': _descriptionController.text,
-          'address': _addressController.text,
           'selleruid': _service.user!.uid,
           'images': provider.listUrls,
+          'postedAt': DateTime.now().microsecondsSinceEpoch,
         });
 
         Navigator.pushNamed(context, UserReviewScreen.id);
@@ -105,9 +104,6 @@ class _SellerCarFormState extends State<SellerCarForm> {
       _descriptionController.text = _catProvider.dataToFirestore.isEmpty
           ? null
           : _catProvider.dataToFirestore['description'];
-      _addressController.text = _catProvider.dataToFirestore.isEmpty
-          ? null
-          : _catProvider.dataToFirestore['address'];
     });
     super.didChangeDependencies();
   }
@@ -374,7 +370,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
                       if (value!.isEmpty) {
                         return 'Please complete required field.';
                       }
-                      if (value.length < 10) {
+                      if (value.length < 15) {
                         return 'Needs atleast 15 characters';
                       }
                       return null;
