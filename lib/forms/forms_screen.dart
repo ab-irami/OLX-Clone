@@ -53,7 +53,7 @@ class _FormsScreenState extends State<FormsScreen> {
           'price': _priceController.text,
           'title': _titleController.text,
           'description': _descriptionController.text,
-          'selleruid': _service.user!.uid,
+          'sellerUid': _service.user!.uid,
           'images': provider.listUrls,
           'postedAt': DateTime.now().microsecondsSinceEpoch,
         });

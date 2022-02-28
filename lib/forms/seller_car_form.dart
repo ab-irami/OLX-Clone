@@ -47,7 +47,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
           'no. of owners': _noOfOwnerController.text,
           'title': _titleController.text,
           'description': _descriptionController.text,
-          'selleruid': _service.user!.uid,
+          'sellerUid': _service.user!.uid,
           'images': provider.listUrls,
           'postedAt': DateTime.now().microsecondsSinceEpoch,
         });

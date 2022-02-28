@@ -31,6 +31,7 @@ dependencies:
   image_picker: ^0.8.4+10
   firebase_storage: ^10.2.9
   galleryimage: ^1.1.0
+  like_button: ^2.0.4
 
 dev_dependencies:
   flutter_test:

@@ -14,7 +14,8 @@ class CategoryWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         child: FutureBuilder<QuerySnapshot>(
-          future: _service.categories.orderBy('sortId', descending: false).get(),
+          future:
+              _service.categories.orderBy('sortId', descending: false).get(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -32,13 +33,16 @@ class CategoryWidget extends StatelessWidget {
                   Row(
                     children: [
                       const Expanded(
-                        child: Text('Categories'),
+                        child: Text(
+                          'Categories',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(
-                            context, CategoryListScreen.id
-                          );
+                          Navigator.pushNamed(context, CategoryListScreen.id);
                         },
                         child: Row(
                           children: const [

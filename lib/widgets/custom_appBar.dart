@@ -92,6 +92,41 @@ class CustomAppBar extends StatelessWidget {
           ),
         ),
       ),
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(100),
+        child: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40.0,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        labelText: 'Find Cars, Mobiles and many more',
+                        labelStyle: const TextStyle(
+                          fontSize: 12.0,
+                        ),
+                        contentPadding:
+                            const EdgeInsets.only(left: 10.0, right: 10.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                const Icon(Icons.notifications_none),
+                const SizedBox(width: 10.0),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
