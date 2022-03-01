@@ -3,7 +3,6 @@ import 'package:ecom_app/provider/cat_provider.dart';
 import 'package:ecom_app/screens/categories/category_list_screen.dart';
 import 'package:ecom_app/screens/categories/sub_cat_list_screen.dart';
 import 'package:ecom_app/screens/products_by_category_screen.dart';
-import 'package:ecom_app/screens/sell_items/seller_sub_cat_list_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

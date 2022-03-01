@@ -53,6 +53,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     var _productProvider = Provider.of<ProductProvider>(context);
+    GeoPoint _location = _productProvider.sellerDetails['location'];
 
     var data = _productProvider.productData;
     var _price = int.parse(data['price']);
@@ -60,8 +61,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
     var date = DateTime.fromMicrosecondsSinceEpoch(data['postedAt']);
     var _formattedDate = DateFormat.yMMMd().format(date);
-
-    GeoPoint _location = _productProvider.sellerDetails['location'];
 
     return Scaffold(
       appBar: AppBar(
@@ -301,9 +300,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                     ),
                                                     label: Flexible(
                                                       child: Text(
-                                                        _productProvider.sellerDetails == null
+                                                        _productProvider
+                                                                    .sellerDetails ==
+                                                                null
                                                             ? ''
-                                                            : _productProvider.sellerDetails['address'],
+                                                            : _productProvider
+                                                                    .sellerDetails[
+                                                                'address'],
                                                         maxLines: 1,
                                                         style: const TextStyle(
                                                           color: Colors.black,
@@ -383,21 +386,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                    'Bedrooms : ${data['bedrooms']}'),
+                                                  'Bedrooms : ${data['bedrooms']}',
+                                                ),
                                                 Text(
-                                                    'Bathrooms : ${data['bathrooms']}'),
+                                                  'Bathrooms : ${data['bathrooms']}',
+                                                ),
                                                 Text(
-                                                    'Furnishing : ${data['furnishing']}'),
+                                                  'Furnishing : ${data['furnishing']}',
+                                                ),
                                                 Text(
-                                                    'Construction Status : ${data['constructionStatus']}'),
+                                                  'Construction Status : ${data['constructionStatus']}',
+                                                ),
                                                 Text(
-                                                    'Building SQFT : ${data['buildingSqft']}'),
+                                                  'Building SQFT : ${data['buildingSqft']}',
+                                                ),
                                                 Text(
-                                                    'Carpet SQFT : ${data['carpetSqft']}'),
+                                                  'Carpet SQFT : ${data['carpetSqft']}',
+                                                ),
                                                 Text(
-                                                    'Total Floors : ${data['totalFloors']}'),
+                                                  'Total Floors : ${data['totalFloors']}',
+                                                ),
                                               ],
                                             ),
+                                          const SizedBox(height: 20.0),
+                                          Text(
+                                            'Ad posted at : $_formattedDate',
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -617,3 +631,5 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 }
+
+//format :(
