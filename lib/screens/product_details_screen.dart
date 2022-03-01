@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +7,9 @@ import 'package:ecom_app/provider/product_provider.dart';
 import 'package:like_button/like_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_launcher/map_launcher.dart' as launcher;
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({Key? key}) : super(key: key);
@@ -21,6 +25,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _index = 0;
   final _format = NumberFormat('##, ##, ##0');
 
+  late GoogleMapController _mapController;
+
   @override
   void initState() {
     Timer(const Duration(seconds: 2), () {
@@ -29,6 +35,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       });
     });
     super.initState();
+  }
+
+  _mapLauncher(location) async {
+    final availableMaps = await launcher.MapLauncher.installedMaps;
+
+    await availableMaps.first.showMarker(
+      coords: launcher.Coords(location.latitude, location.longitude),
+      title: 'Seller Location is here',
+    );
+  }
+
+  _callSeller(number) {
+    launch(number);
   }
 
   @override
@@ -41,6 +60,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
     var date = DateTime.fromMicrosecondsSinceEpoch(data['postedAt']);
     var _formattedDate = DateFormat.yMMMd().format(date);
+
+    GeoPoint _location = _productProvider.sellerDetails['location'];
 
     return Scaffold(
       appBar: AppBar(
@@ -132,7 +153,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           border: Border.all(
-                                            color: Theme.of(context).primaryColor,
+                                            color:
+                                                Theme.of(context).primaryColor,
                                           ),
                                         ),
                                       ),
@@ -144,6 +166,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ],
                         ),
                 ),
+                const SizedBox(height: 10.0),
                 _loading
                     ? Container()
                     : Container(
@@ -155,7 +178,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 Text(
                                   data['title'].toUpperCase(),
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0,
+                                  ),
                                 ),
                                 if (data['category'] == 'Cars')
                                   Text('(${(data['year'])})'),
@@ -238,7 +263,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         padding: const EdgeInsets.only(
                                             left: 12.0, right: 12.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: [
                                             Row(
                                               mainAxisSize: MainAxisSize.min,
@@ -264,10 +290,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   child: TextButton.icon(
                                                     onPressed: () {},
                                                     style: const ButtonStyle(
-                                                      alignment: Alignment.center,
+                                                      alignment:
+                                                          Alignment.center,
                                                     ),
                                                     icon: const Icon(
-                                                      Icons.location_on_outlined,
+                                                      Icons
+                                                          .location_on_outlined,
                                                       size: 12.0,
                                                       color: Colors.black,
                                                     ),
@@ -278,7 +306,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                             : _productProvider.sellerDetails['address'],
                                                         maxLines: 1,
                                                         style: const TextStyle(
-                                                            color: Colors.black),
+                                                          color: Colors.black,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -333,37 +362,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(data['description']),
-                                          const SizedBox(height: 10.0), 
-          
-                                          if (data['subCat'] == 'Mobile Phone' ||
+                                          const SizedBox(height: 10.0),
+                                          if (data['subCat'] ==
+                                                  'Mobile Phone' ||
                                               data['subCat'] == null)
-
                                             Text('Brand: ${data['brand']}'),
-          
-          
                                           if (data['subCat'] == 'Accessories' ||
                                               data['subCat'] == 'Tablets' ||
-                                              data['subCat'] == 'For Sale: House & Apartments' ||
-                                              data['subCat'] == 'For Rent: House & Apartments')
-
+                                              data['subCat'] ==
+                                                  'For Sale: House & Apartments' ||
+                                              data['subCat'] ==
+                                                  'For Rent: House & Apartments')
                                             Text('Type : ${data['type']}'),
-          
-          
-                                          if (data['subCat'] == 'For Sale: House & Apartments' ||
-                                              data['subCat'] == 'For Rent: House & Apartments')
-
+                                          if (data['subCat'] ==
+                                                  'For Sale: House & Apartments' ||
+                                              data['subCat'] ==
+                                                  'For Rent: House & Apartments')
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text('Bedrooms : ${data['bedrooms']}'),
-                                                Text('Bathrooms : ${data['bathrooms']}'),
-                                                Text('Furnishing : ${data['furnishing']}'),
-                                                Text('Construction Status : ${data['constructionStatus']}'),
-                                                Text('Building SQFT : ${data['buildingSqft']}'),
-                                                Text('Carpet SQFT : ${data['carpetSqft']}'),
-                                                Text('Total Floors : ${data['totalFloors']}'),
+                                                Text(
+                                                    'Bedrooms : ${data['bedrooms']}'),
+                                                Text(
+                                                    'Bathrooms : ${data['bathrooms']}'),
+                                                Text(
+                                                    'Furnishing : ${data['furnishing']}'),
+                                                Text(
+                                                    'Construction Status : ${data['constructionStatus']}'),
+                                                Text(
+                                                    'Building SQFT : ${data['buildingSqft']}'),
+                                                Text(
+                                                    'Carpet SQFT : ${data['carpetSqft']}'),
+                                                Text(
+                                                    'Total Floors : ${data['totalFloors']}'),
                                               ],
-                                            ),                                         
+                                            ),
                                         ],
                                       ),
                                     ),
@@ -376,7 +410,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               children: [
                                 CircleAvatar(
                                   radius: 40.0,
-                                  backgroundColor: Theme.of(context).primaryColor,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
                                   child: CircleAvatar(
                                     backgroundColor: Colors.blue.shade50,
                                     radius: 38,
@@ -391,9 +426,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 Expanded(
                                   child: ListTile(
                                     title: Text(
-                                      _productProvider.sellerDetails['name'] == null 
-                                      ? ''
-                                      : _productProvider.sellerDetails['name'].toUpperCase(),
+                                      _productProvider.sellerDetails['name'] ==
+                                              null
+                                          ? ''
+                                          : _productProvider
+                                              .sellerDetails['name']
+                                              .toUpperCase(),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20.0,
@@ -429,9 +467,52 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             Container(
                               height: 200,
                               color: Colors.grey.shade300,
-                              child: const Center(
-                                child: Text('Seller Location'),
-                              ),                            
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: GoogleMap(
+                                      initialCameraPosition: CameraPosition(
+                                        target: LatLng(
+                                          _location.latitude,
+                                          _location.longitude,
+                                        ),
+                                        zoom: 15,
+                                      ),
+                                      mapType: MapType.normal,
+                                      onMapCreated:
+                                          (GoogleMapController mapController) {
+                                        setState(() {
+                                          _mapController = mapController;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  const Center(
+                                      child: Icon(Icons.location_on, size: 35)),
+                                  const Center(
+                                    child: CircleAvatar(
+                                      radius: 40,
+                                      backgroundColor: Colors.black12,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 8.0,
+                                    top: 8.0,
+                                    child: Material(
+                                      elevation: 4,
+                                      shape: Border.all(
+                                          color: Colors.grey.shade300),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          _mapLauncher(_location);
+                                        },
+                                        icon: const Icon(
+                                            Icons.alt_route_outlined),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 10.0),
                             Row(
@@ -455,7 +536,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ],
                             ),
                             const SizedBox(height: 80)
-
                           ],
                         ),
                       ),
@@ -471,7 +551,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             children: [
               Expanded(
                 child: NeumorphicButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   style: NeumorphicStyle(color: Theme.of(context).primaryColor),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -500,7 +580,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               const SizedBox(width: 20.0),
               Expanded(
                 child: NeumorphicButton(
-                  onPressed: (){},
+                  onPressed: () {
+                    _callSeller(
+                      'tel:${_productProvider.sellerDetails['mobile']}',
+                    );
+                  },
                   style: NeumorphicStyle(color: Theme.of(context).primaryColor),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -533,5 +617,3 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 }
-
-//format code :(

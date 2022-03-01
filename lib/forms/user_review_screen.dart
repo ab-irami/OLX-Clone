@@ -5,7 +5,6 @@ import 'package:ecom_app/screens/main_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 
