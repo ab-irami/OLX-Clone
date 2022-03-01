@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_app/screens/chat/chat_conversation_screen.dart';
+import 'package:ecom_app/screens/chat/chat_screen.dart';
+import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +29,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _format = NumberFormat('##, ##, ##0');
 
   late GoogleMapController _mapController;
+  final FirebaseService _service = FirebaseService();
 
   @override
   void initState() {
@@ -48,6 +52,41 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   _callSeller(number) {
     launch(number);
+  }
+
+  createChatRoom(ProductProvider _provider) {
+    Map<String, dynamic> product = {
+      'productId': _provider.productData.id,
+      'productImage': _provider.productData['images'][0],
+      'price': _provider.productData['price'],
+      'title': _provider.productData['title'],
+    };
+    List<String> users = [
+      _provider.sellerDetails['uid'],
+      _service.user!.uid,
+    ];
+
+    String? chatRoomId =
+        '${_provider.sellerDetails['uid']}${_service.user!.uid}${_provider.productData.id}';
+
+    Map<String, dynamic> chatData = {
+      'users': users,
+      'chatRoomId': chatRoomId,
+      'product': product,
+      'lastChat': null,
+      'lastChatTime': DateTime.now().microsecondsSinceEpoch,
+    };
+
+    _service.createChatRoom(
+      chatData: chatData,
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => ChatConversations(chatRoomId: chatRoomId,),
+      ),
+    );
   }
 
   @override
@@ -561,11 +600,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       bottomSheet: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
+          child: _productProvider.productData['sellerUid'] == _service.user!.uid  
+          ? Expanded(
+                child: NeumorphicButton(
+                  onPressed: () {},
+                  style: NeumorphicStyle(color: Theme.of(context).primaryColor),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.edit,
+                          size: 16.0,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 10.0),
+                        Text(
+                          'Edit Product',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ) 
+          : Row(
             children: [
               Expanded(
                 child: NeumorphicButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    createChatRoom(_productProvider);
+                  },
                   style: NeumorphicStyle(color: Theme.of(context).primaryColor),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),

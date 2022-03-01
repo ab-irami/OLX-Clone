@@ -48,16 +48,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   getSellerAddress(sellerId) {
     _service.getSellerData(sellerId).then((value) {
-      setState(() {
-        _address = value['address'];
-        sellerDetails = value;
-      });
+      if (mounted) {
+        setState(() {
+          _address = value['address'];
+          sellerDetails = value;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     var _productProvider = Provider.of<ProductProvider>(context);
 
     return FutureBuilder<DocumentSnapshot>(
@@ -84,11 +85,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
               return appBar(address, context, _productProvider, sellerDetails);
             });
           } else {
-            return appBar(data['address'], context, _productProvider, sellerDetails);
+            return appBar(
+                data['address'], context, _productProvider, sellerDetails);
           }
         }
 
-        return appBar('Fetching location', context, _productProvider, sellerDetails);
+        return appBar(
+            'Fetching location', context, _productProvider, sellerDetails);
       },
     );
   }

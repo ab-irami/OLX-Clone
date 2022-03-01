@@ -10,7 +10,7 @@ import 'package:ecom_app/screens/authentication/password_reset_screen.dart';
 import 'package:ecom_app/screens/authentication/phoneauth_screen.dart';
 import 'package:ecom_app/screens/categories/category_list_screen.dart';
 import 'package:ecom_app/screens/categories/sub_cat_list_screen.dart';
-import 'package:ecom_app/screens/chat_screen.dart';
+import 'package:ecom_app/screens/chat/chat_screen.dart';
 import 'package:ecom_app/screens/home_screen.dart';
 import 'package:ecom_app/screens/location_screen.dart';
 import 'package:ecom_app/screens/login_screen.dart';

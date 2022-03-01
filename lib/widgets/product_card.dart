@@ -65,30 +65,39 @@ class _ProductCardState extends State<ProductCard> {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    height: 100.0,
-                    child: Center(
-                      child: Image.network(widget.data['images'][0]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
+                      children: [
+                        Container(
+                          height: 100.0,
+                          child: Center(
+                            child: Image.network(widget.data['images'][0]),
+                          ),
+                        ),
+                        const SizedBox(height: 10.0),
+                        Text(
+                          widget._formattedPrice,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          widget.data['title'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        widget.data['category'] == 'cars'
+                            ? Text(
+                                '${widget.data['year']} - ${_formattedKm(widget.data['kmDrive'])}km')
+                            : const Text(''),
+                        const SizedBox(height: 10.0),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 10.0),
-                  Text(
-                    widget._formattedPrice,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    widget.data['title'],
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  widget.data['category'] == 'cars'
-                      ? Text(
-                          '${widget.data['year']} - ${_formattedKm(widget.data['kmDrive'])}km')
-                      : const Text(''),
-                  const SizedBox(height: 10.0),
                   Row(
                     children: [
                       const Icon(

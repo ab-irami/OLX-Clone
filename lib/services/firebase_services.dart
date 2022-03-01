@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecom_app/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geocode;
@@ -7,8 +6,12 @@ import 'package:geocoding/geocoding.dart' as geocode;
 class FirebaseService {
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
-  CollectionReference products = FirebaseFirestore.instance.collection('products');
+  CollectionReference categories =
+      FirebaseFirestore.instance.collection('categories');
+  CollectionReference products =
+      FirebaseFirestore.instance.collection('products');
+  CollectionReference messages =
+      FirebaseFirestore.instance.collection('messages');
 
   Future<void> updateUser(Map<String, dynamic> data, context, screen) {
     return users
@@ -46,5 +49,23 @@ class FirebaseService {
   Future<DocumentSnapshot> getSellerData(id) async {
     DocumentSnapshot doc = await users.doc(id).get();
     return doc;
+  }
+
+  createChatRoom({chatData}) {
+    messages.doc(chatData['chatRoomId']).set(chatData).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  createChat(String? chatRoomId, message) {
+    messages.doc(chatRoomId).collection('chats').add(message).catchError((e) {
+      print(e.toString());
+    });
+    messages.doc(chatRoomId).update(
+        {'lastChat': message['message'], 'lastChatTime': message['time']});
+  }
+
+  getChat(chatRoomId) async {
+    return messages.doc(chatRoomId).collection('chats').orderBy('time').snapshots();
   }
 }

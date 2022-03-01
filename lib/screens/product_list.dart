@@ -89,7 +89,7 @@ class ProductList extends StatelessWidget {
                   physics: const ScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 200.0,
-                    childAspectRatio: 2 / 2.6,
+                    childAspectRatio: 2 / 3,
                     crossAxisSpacing: 8.8,
                     mainAxisExtent: 10.0,
                   ),

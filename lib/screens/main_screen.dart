@@ -1,5 +1,5 @@
 import 'package:ecom_app/screens/account_screen.dart';
-import 'package:ecom_app/screens/chat_screen.dart';
+import 'package:ecom_app/screens/chat/chat_screen.dart';
 import 'package:ecom_app/screens/home_screen.dart';
 import 'package:ecom_app/screens/my_ad_screen.dart';
 import 'package:ecom_app/screens/sell_items/seller_category_list_screen.dart';
