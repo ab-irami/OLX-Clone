@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_app/provider/cat_provider.dart';
 import 'package:ecom_app/screens/categories/category_list_screen.dart';
+import 'package:ecom_app/screens/categories/sub_cat_list_screen.dart';
+import 'package:ecom_app/screens/products_by_category_screen.dart';
+import 'package:ecom_app/screens/sell_items/seller_sub_cat_list_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({Key? key}) : super(key: key);
@@ -9,6 +14,7 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseService _service = FirebaseService();
+    var _catProvider = Provider.of<CategoryProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -70,23 +76,39 @@ class CategoryWidget extends StatelessWidget {
                         var doc = snapshot.data!.docs[index];
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 60.0,
-                            height: 50.0,
-                            child: Column(
-                              children: [
-                                Image.network(doc['image']),
-                                Flexible(
-                                  child: Text(
-                                    doc['catName'].toUpperCase(),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontSize: 10.0,
+                          child: InkWell(
+                            onTap: () {
+                              _catProvider.getCategory(doc['catName']);
+                              _catProvider.getCatSnapShot(doc);
+                              if (doc['subCat'] == null) {
+                                _catProvider.getSubCategory(null);
+                                Navigator.pushNamed(context, ProductByCategoryScreen.id);
+                              } else {
+                                Navigator.pushNamed(
+                                  context,
+                                  SubCatListScreen.id,
+                                  arguments: doc,
+                                );
+                              }
+                            },
+                            child: Container(
+                              width: 60.0,
+                              height: 50.0,
+                              child: Column(
+                                children: [
+                                  Image.network(doc['image']),
+                                  Flexible(
+                                    child: Text(
+                                      doc['catName'].toUpperCase(),
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 10.0,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );

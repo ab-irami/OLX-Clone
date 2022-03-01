@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_app/provider/cat_provider.dart';
+import 'package:ecom_app/screens/products_by_category_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SubCatListScreen extends StatelessWidget {
   const SubCatListScreen({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class SubCatListScreen extends StatelessWidget {
     QueryDocumentSnapshot args =
         ModalRoute.of(context)!.settings.arguments as QueryDocumentSnapshot;
     FirebaseService _service = FirebaseService();
+    var _catProvider = Provider.of<CategoryProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +59,10 @@ class SubCatListScreen extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            _catProvider.getSubCategory(data[index]);
+                            Navigator.pushNamed(context, ProductByCategoryScreen.id);
+                          },
                           title: Text(
                             data[index],
                             style: const TextStyle(

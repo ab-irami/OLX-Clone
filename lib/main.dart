@@ -17,6 +17,7 @@ import 'package:ecom_app/screens/login_screen.dart';
 import 'package:ecom_app/screens/main_screen.dart';
 import 'package:ecom_app/screens/my_ad_screen.dart';
 import 'package:ecom_app/screens/product_details_screen.dart';
+import 'package:ecom_app/screens/products_by_category_screen.dart';
 import 'package:ecom_app/screens/sell_items/seller_category_list_screen.dart';
 import 'package:ecom_app/screens/sell_items/seller_sub_cat_list_screen.dart';
 import 'package:ecom_app/screens/splash_screen.dart';
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
         UserReviewScreen.id :(context) => const UserReviewScreen(),
         FormsScreen.id :(context) => const FormsScreen(),
         ProductDetailsScreen.id :(context) => const ProductDetailsScreen(),
+        ProductByCategoryScreen.id:(context) => const ProductByCategoryScreen(),
       },
     );
   }

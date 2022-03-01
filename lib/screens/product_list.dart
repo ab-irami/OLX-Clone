@@ -1,15 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_app/provider/cat_provider.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:ecom_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ProductList extends StatelessWidget {
-  const ProductList({Key? key}) : super(key: key);
+  const ProductList({Key? key, this.proScreen}) : super(key: key);
+
+  final bool? proScreen;
 
   @override
   Widget build(BuildContext context) {
     final FirebaseService _service = FirebaseService();
+    var _catProvider = Provider.of<CategoryProvider>(context);
 
     final _format = NumberFormat('##, ##, ##0');
 
@@ -25,7 +30,15 @@ class ProductList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
         child: FutureBuilder<QuerySnapshot>(
-          future: _service.products.orderBy('postedAt').get(),
+          future: _catProvider.selectedCategory == 'Cars'
+              ? _service.products
+                  .orderBy('postedAt')
+                  .where('category', isEqualTo: _catProvider.selectedCategory)
+                  .get()
+              : _service.products
+                  .orderBy('postedAt')
+                  .where('subCat', isEqualTo: _catProvider.selectedSubCategory)
+                  .get(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -43,21 +56,34 @@ class ProductList extends StatelessWidget {
               );
             }
 
+            if (snapshot.data!.docs.isEmpty) {
+              return Container(
+                height: MediaQuery.of(context).size.height,
+                child: const Center(
+                  child: Text(
+                    'No products added\nunder selected Category.',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 56.0,
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Fresh Recommendations',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                if (proScreen == false)
+                  Container(
+                    height: 56.0,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Fresh Recommendations',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 GridView.builder(
                   shrinkWrap: true,
                   physics: const ScrollPhysics(),

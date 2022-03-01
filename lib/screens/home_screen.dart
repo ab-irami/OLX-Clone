@@ -1,8 +1,10 @@
+import 'package:ecom_app/provider/cat_provider.dart';
 import 'package:ecom_app/screens/product_list.dart';
 import 'package:ecom_app/widgets/banner_widget.dart';
 import 'package:ecom_app/widgets/category_widget.dart';
 import 'package:ecom_app/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,9 +17,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String address = '';
-
   @override
   Widget build(BuildContext context) {
+    final _catProvider = Provider.of<CategoryProvider>(context);
+    _catProvider.clearSelectedCat();
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       resizeToAvoidBottomInset: false,
@@ -47,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              ProductList(),
+              const ProductList(proScreen: false),
             ],
           ),
         ),
