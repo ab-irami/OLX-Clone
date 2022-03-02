@@ -4,7 +4,6 @@ import 'package:ecom_app/screens/product_details_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 
 class ProductCard extends StatefulWidget {
