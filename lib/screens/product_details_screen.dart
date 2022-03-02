@@ -60,6 +60,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       'productImage': _provider.productData['images'][0],
       'price': _provider.productData['price'],
       'title': _provider.productData['title'],
+      'seller': _provider.productData['sellerUid'],
     };
     List<String> users = [
       _provider.sellerDetails['uid'],
@@ -72,6 +73,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     Map<String, dynamic> chatData = {
       'users': users,
       'chatRoomId': chatRoomId,
+      'read': false,
       'product': product,
       'lastChat': null,
       'lastChatTime': DateTime.now().microsecondsSinceEpoch,

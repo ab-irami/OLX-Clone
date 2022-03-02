@@ -134,6 +134,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  custom_pop_up_menu:
+    dependency: "direct main"
+    description:
+      name: custom_pop_up_menu
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.3+1"
   email_validator:
     dependency: "direct main"
     description:
@@ -244,6 +251,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  flutter_chat_bubble:
+    dependency: "direct main"
+    description:
+      name: flutter_chat_bubble
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:
