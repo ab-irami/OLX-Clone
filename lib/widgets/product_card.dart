@@ -29,6 +29,8 @@ class _ProductCardState extends State<ProductCard> {
 
   String address = '';
   late DocumentSnapshot sellerDetails;
+  List fav = [];
+  bool isLiked = false;
 
   String _formattedKm(km) {
     var _km = int.parse(km);
@@ -38,6 +40,12 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   void initState() {
+    getSellerData();
+    getFavourites();
+    super.initState();
+  }
+
+  getSellerData() {
     _service.getSellerData(widget.data['sellerUid']).then((value) {
       if (mounted) {
         setState(() {
@@ -46,7 +54,29 @@ class _ProductCardState extends State<ProductCard> {
         });
       }
     });
-    super.initState();
+  }
+
+  getFavourites() {
+    _service.products.doc(widget.data.id).get().then((value) {
+      if (mounted) {
+        setState(() {
+          fav = value['favourites'];
+        });
+      }
+      if (fav.contains(_service.user!.uid)) {
+        if (mounted) {
+          setState(() {
+            isLiked = true;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            isLiked = false;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -69,8 +99,8 @@ class _ProductCardState extends State<ProductCard> {
                 children: [
                   Container(
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
-
                       children: [
                         Container(
                           height: 100.0,
@@ -99,6 +129,7 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                   ),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(
                         Icons.location_pin,
@@ -118,24 +149,15 @@ class _ProductCardState extends State<ProductCard> {
               ),
               Positioned(
                 right: 0.0,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Center(
-                    child: LikeButton(
-                      circleColor: const CircleColor(
-                          start: Color(0xff00ddff), end: Color(0xff0099cc)),
-                      bubblesColor: const BubblesColor(
-                        dotPrimaryColor: Color(0xff33b5e5),
-                        dotSecondaryColor: Color(0xff0099cc),
-                      ),
-                      likeBuilder: (bool isLiked) {
-                        return Icon(
-                          Icons.favorite_border,
-                          color: isLiked ? Colors.red : Colors.grey,
-                        );
-                      },
-                    ),
-                  ),
+                child: IconButton(
+                  icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
+                  color: isLiked ? Colors.red : Colors.black,
+                  onPressed: () {
+                    setState(() {
+                      isLiked = !isLiked;
+                    });
+                    _service.updateFavourite(isLiked, widget.data.id, context);
+                  },
                 ),
               ),
             ],

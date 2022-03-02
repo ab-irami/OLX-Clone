@@ -56,6 +56,7 @@ class _FormsScreenState extends State<FormsScreen> {
           'sellerUid': _service.user!.uid,
           'images': provider.listUrls,
           'postedAt': DateTime.now().microsecondsSinceEpoch,
+          'favourite': [],
         });
 
         Navigator.pushNamed(context, UserReviewScreen.id);

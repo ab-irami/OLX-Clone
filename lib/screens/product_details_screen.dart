@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_app/screens/chat/chat_conversation_screen.dart';
-import 'package:ecom_app/screens/chat/chat_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:ecom_app/provider/product_provider.dart';
-import 'package:like_button/like_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,6 +25,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _loading = true;
   int _index = 0;
   final _format = NumberFormat('##, ##, ##0');
+  List fav = [];
+  bool isLiked = false;
 
   late GoogleMapController _mapController;
   final FirebaseService _service = FirebaseService();
@@ -86,9 +86,35 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => ChatConversations(chatRoomId: chatRoomId,),
+        builder: (BuildContext context) => ChatConversations(
+          chatRoomId: chatRoomId,
+        ),
       ),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    var _productProvider = Provider.of<ProductProvider>(context);
+    getFavourites(_productProvider);
+    super.didChangeDependencies();
+  }
+
+  getFavourites(ProductProvider _productProvider) {
+    _service.products.doc(_productProvider.productData.id).get().then((value) {
+      setState(() {
+        fav = value['favourites'];
+      });
+      if (fav.contains(_service.user!.uid)) {
+        setState(() {
+          isLiked = true;
+        });
+      } else {
+        setState(() {
+          isLiked = false;
+        });
+      }
+    });
   }
 
   @override
@@ -118,19 +144,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
             onPressed: () {},
           ),
-          LikeButton(
-            circleColor: const CircleColor(
-                start: Color(0xff00ddff), end: Color(0xff0099cc)),
-            bubblesColor: const BubblesColor(
-              dotPrimaryColor: Color(0xff33b5e5),
-              dotSecondaryColor: Color(0xff0099cc),
+          Positioned(
+            right: 0.0,
+            child: IconButton(
+              icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
+              color: isLiked ? Colors.red : Colors.black,
+              onPressed: () {
+                setState(() {
+                  isLiked = !isLiked;
+                });
+                _service.updateFavourite(isLiked, data.id, context);
+              },
             ),
-            likeBuilder: (bool isLiked) {
-              return Icon(
-                Icons.favorite_border,
-                color: isLiked ? Colors.red : Colors.grey,
-              );
-            },
           ),
         ],
       ),
@@ -341,9 +366,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                     ),
                                                     label: Flexible(
                                                       child: Text(
-                                                        _productProvider
-                                                                    .sellerDetails ==
-                                                                null
+                                                        _productProvider.sellerDetails == null
                                                             ? ''
                                                             : _productProvider
                                                                     .sellerDetails[
@@ -413,40 +436,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             Text('Brand: ${data['brand']}'),
                                           if (data['subCat'] == 'Accessories' ||
                                               data['subCat'] == 'Tablets' ||
-                                              data['subCat'] ==
-                                                  'For Sale: House & Apartments' ||
-                                              data['subCat'] ==
-                                                  'For Rent: House & Apartments')
+                                              data['subCat'] == 'For Sale: House & Apartments' ||
+                                              data['subCat'] == 'For Rent: House & Apartments')
                                             Text('Type : ${data['type']}'),
-                                          if (data['subCat'] ==
-                                                  'For Sale: House & Apartments' ||
-                                              data['subCat'] ==
-                                                  'For Rent: House & Apartments')
+                                          if (data['subCat'] == 'For Sale: House & Apartments' ||
+                                              data['subCat'] == 'For Rent: House & Apartments')
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  'Bedrooms : ${data['bedrooms']}',
-                                                ),
-                                                Text(
-                                                  'Bathrooms : ${data['bathrooms']}',
-                                                ),
-                                                Text(
-                                                  'Furnishing : ${data['furnishing']}',
-                                                ),
-                                                Text(
-                                                  'Construction Status : ${data['constructionStatus']}',
-                                                ),
-                                                Text(
-                                                  'Building SQFT : ${data['buildingSqft']}',
-                                                ),
-                                                Text(
-                                                  'Carpet SQFT : ${data['carpetSqft']}',
-                                                ),
-                                                Text(
-                                                  'Total Floors : ${data['totalFloors']}',
-                                                ),
+                                                Text('Bedrooms : ${data['bedrooms']}'),
+                                                Text('Bathrooms : ${data['bathrooms']}'),
+                                                Text('Furnishing : ${data['furnishing']}'),
+                                                Text('Construction Status : ${data['constructionStatus']}'),
+                                                Text('Building SQFT : ${data['buildingSqft']}'),
+                                                Text('Carpet SQFT : ${data['carpetSqft']}'),
+                                                Text('Total Floors : ${data['totalFloors']}'),
                                               ],
                                             ),
                                           const SizedBox(height: 20.0),
@@ -481,8 +486,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 Expanded(
                                   child: ListTile(
                                     title: Text(
-                                      _productProvider.sellerDetails['name'] ==
-                                              null
+                                      _productProvider.sellerDetails['name'] == null
                                           ? ''
                                           : _productProvider
                                               .sellerDetails['name']
@@ -542,8 +546,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       },
                                     ),
                                   ),
-                                  const Center(
-                                      child: Icon(Icons.location_on, size: 35)),
+                                  const Center(child: Icon(Icons.location_on, size: 35)),
                                   const Center(
                                     child: CircleAvatar(
                                       radius: 40,
@@ -602,106 +605,107 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       bottomSheet: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: _productProvider.productData['sellerUid'] == _service.user!.uid  
-          ? Expanded(
-                child: NeumorphicButton(
-                  onPressed: () {},
-                  style: NeumorphicStyle(color: Theme.of(context).primaryColor),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.edit,
-                          size: 16.0,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 10.0),
-                        Text(
-                          'Edit Product',
-                          style: TextStyle(
+          child: _productProvider.productData['sellerUid'] == _service.user!.uid
+              ? Expanded(
+                  child: NeumorphicButton(
+                    onPressed: () {},
+                    style:
+                        NeumorphicStyle(color: Theme.of(context).primaryColor),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.edit,
+                            size: 16.0,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 10.0),
+                          Text(
+                            'Edit Product',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ) 
-          : Row(
-            children: [
-              Expanded(
-                child: NeumorphicButton(
-                  onPressed: () {
-                    createChatRoom(_productProvider);
-                  },
-                  style: NeumorphicStyle(color: Theme.of(context).primaryColor),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          CupertinoIcons.chat_bubble,
-                          size: 16.0,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 10.0),
-                        Text(
-                          'Chat',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: NeumorphicButton(
+                        onPressed: () {
+                          createChatRoom(_productProvider);
+                        },
+                        style: NeumorphicStyle(
+                            color: Theme.of(context).primaryColor),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                CupertinoIcons.chat_bubble,
+                                size: 16.0,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10.0),
+                              Text(
+                                'Chat',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 20.0),
-              Expanded(
-                child: NeumorphicButton(
-                  onPressed: () {
-                    _callSeller(
-                      'tel:${_productProvider.sellerDetails['mobile']}',
-                    );
-                  },
-                  style: NeumorphicStyle(color: Theme.of(context).primaryColor),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          CupertinoIcons.phone,
-                          size: 16.0,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 10.0),
-                        Text(
-                          'Call',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                    const SizedBox(width: 20.0),
+                    Expanded(
+                      child: NeumorphicButton(
+                        onPressed: () {
+                          _callSeller(
+                            'tel:${_productProvider.sellerDetails['mobile']}',
+                          );
+                        },
+                        style: NeumorphicStyle(
+                            color: Theme.of(context).primaryColor),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                CupertinoIcons.phone,
+                                size: 16.0,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10.0),
+                              Text(
+                                'Call',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
   }
 }
-
-//format :(

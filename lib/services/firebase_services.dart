@@ -159,4 +159,22 @@ class FirebaseService {
       controller: _controller,
     );
   }
+
+  updateFavourite(isLiked, productId, context) {
+    if (isLiked == true) {
+      products.doc(productId).update({
+        'favourite': FieldValue.arrayUnion([user!.uid])
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Added to my favourites'))
+      );
+    } else {
+      products.doc(productId).update({
+        'favourite': FieldValue.arrayRemove([user!.uid])
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Removed from favourites'))
+      );
+    }
+  }
 }

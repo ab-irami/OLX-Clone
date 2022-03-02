@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecom_app/screens/main_screen.dart';
+import 'package:ecom_app/screens/sell_items/seller_category_list_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:ecom_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
@@ -94,6 +96,32 @@ class MyAdScreen extends StatelessWidget {
                       );
                     }
 
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'No Ads given yet',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, SellerCategoryListScreen.id);
+                              },
+                              child: const Text('Add Products'),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).primaryColor),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -114,7 +142,7 @@ class MyAdScreen extends StatelessWidget {
                             gridDelegate:
                                 const SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 200.0,
-                              childAspectRatio: 2 / 2.6,
+                              childAspectRatio: 2 / 3,
                               crossAxisSpacing: 8.8,
                               mainAxisExtent: 10.0,
                             ),
@@ -138,9 +166,105 @@ class MyAdScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const Center(
-              child: Text('My favourites'),
-            )
+            Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 8.0),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _service.products
+                      .where('favourite', arrayContains: _service.user!.uid)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Padding(
+                        padding:
+                            const EdgeInsets.only(left: 140.0, right: 140.0),
+                        child: Center(
+                          child: LinearProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColor),
+                            backgroundColor: Colors.grey.shade100,
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (snapshot.data!.docs.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'No Favourites yet',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, MainScreen.id);
+                              },
+                              child: const Text('Add Favourites'),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).primaryColor),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 56.0,
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'My Favourites',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 200.0,
+                              childAspectRatio: 2 / 3,
+                              crossAxisSpacing: 8.8,
+                              mainAxisExtent: 10.0,
+                            ),
+                            itemCount: snapshot.data!.size,
+                            itemBuilder: (BuildContext context, int index) {
+                              var data = snapshot.data!.docs[index];
+                              var price = int.parse(data['price']);
+                              String _formattedPrice =
+                                  '\$ ${_format.format(price)}';
+
+                              return ProductCard(
+                                data: data,
+                                formattedPrice: _formattedPrice,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),
