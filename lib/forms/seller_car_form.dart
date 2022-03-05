@@ -37,14 +37,14 @@ class _SellerCarFormState extends State<SellerCarForm> {
       if (provider.listUrls.isNotEmpty) {
         provider.dataToFirestore.addAll({
           'category': provider.selectedCategory,
-          'subCat': provider.selectedSubCategory,
+          'subCat': null,
           'brand': _brandController.text,
           'year': _yearController.text,
           'price': _priceController.text,
           'fuel': _fuelController.text,
           'transmission': _transmissionController.text,
           'kmDrive': _kmController.text,
-          'no. of owners': _noOfOwnerController.text,
+          'noOfOwners': _noOfOwnerController.text,
           'title': _titleController.text,
           'description': _descriptionController.text,
           'sellerUid': _service.user!.uid,
@@ -98,7 +98,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
           : _catProvider.dataToFirestore['kmDrive'];
       _noOfOwnerController.text = _catProvider.dataToFirestore.isEmpty
           ? null
-          : _catProvider.dataToFirestore['no. of owners'];
+          : _catProvider.dataToFirestore['noOfOwners'];
       _titleController.text = _catProvider.dataToFirestore.isEmpty
           ? null
           : _catProvider.dataToFirestore['title'];
@@ -408,7 +408,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: (_catProvider.listUrls.isNotEmpty)
+                    child: (_catProvider.listUrls.isEmpty)
                         ? const Padding(
                             padding: EdgeInsets.all(10.0),
                             child: Text(

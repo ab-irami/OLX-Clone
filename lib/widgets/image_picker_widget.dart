@@ -84,6 +84,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                     if (_image != null)
                       Positioned(
                         right: 0,
+                        top: 0,
                         child: IconButton(
                           onPressed: () {
                             setState(() {
@@ -112,16 +113,16 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                if(_provider.listUrls.isNotEmpty)
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(4),
+                if (_provider.listUrls.isNotEmpty)
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: GalleryImage(
+                      imageUrls: _provider.listUrls,
+                    ),
                   ),
-                  child: GalleryImage(
-                    imageUrls: _provider.listUrls,
-                  ),
-                ),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -178,9 +179,11 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                           color: Theme.of(context).primaryColor,
                         ),
                         child: Text(
-                          _provider.listUrls.isNotEmpty ? 'Upload more Images' : 'Upload Image',
+                          _provider.listUrls.isNotEmpty
+                              ? 'Upload more Images'
+                              : 'Upload Image',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -192,7 +195,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 if (_uploading)
                   CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColor),
+                      Theme.of(context).primaryColor,
+                    ),
                   )
               ],
             ),

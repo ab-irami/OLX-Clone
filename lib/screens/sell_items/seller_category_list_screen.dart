@@ -38,7 +38,7 @@ class SellerCategoryListScreen extends StatelessWidget {
         child: Container(
           child: FutureBuilder<QuerySnapshot>(
             future:
-                _service.categories.orderBy('sortId', descending: false).get(),
+                _service.categories.orderBy('sortId').get(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {

@@ -35,29 +35,24 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
         .then((value) => saveProductToDB(provider, context))
         .catchError((error) {
       print('Firebase_service - $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to update location'),
-        ),
-      );
     });
   }
 
   Future<void> saveProductToDB(CategoryProvider provider, context) {
-    return _service.products
-        .add(provider.dataToFirestore)
-        .then((value) {
+    return _service.products.add(provider.dataToFirestore).then((value) {
       provider.clearData();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          behavior: SnackBarBehavior.floating,
           content: Text(
-              'We have received your products and will notify you once get approved.'),
+            'We have received your products and will notify you once get approved.'),
         ),
       );
       Navigator.pushReplacementNamed(context, MainScreen.id);
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          behavior: SnackBarBehavior.floating,
           content: Text('Failed to update location'),
         ),
       );
@@ -141,6 +136,8 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
                                 _loading = false;
                               });
                             });
+                            //Navigator.pushReplacementNamed(
+                                //context, MainScreen.id);
                           },
                           child: const Text(
                             'Confirm',
@@ -206,7 +203,7 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
             }
 
             _nameController.text = snapshot.data!['name'];
-            _phoneController.text = snapshot.data!['mobile'].subString(3);
+            _phoneController.text = snapshot.data!['mobile'].substring(3);
             _emailController.text = snapshot.data!['email'];
             _addressController.text = snapshot.data!['address'];
             return SingleChildScrollView(
@@ -323,12 +320,6 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
                               labelText: 'Address*',
                               helperText: 'Contact address',
                             ),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please complete required field.';
-                              }
-                              return null;
-                            },
                           ),
                         ),
                         IconButton(

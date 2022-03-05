@@ -27,9 +27,11 @@ class SearchService {
       delegate: SearchPage<Products>(
         onQueryUpdate: (s) => print(s),
         items: productList,
-        barTheme: ThemeData().copyWith(
+        barTheme:  ThemeData(
           backgroundColor: Colors.white,
-          iconTheme: const IconThemeData(color: Colors.black),
+          iconTheme: const IconThemeData(
+            color: Colors.black,
+          ),
         ),
         searchLabel: 'Search Products',
         searchStyle: const TextStyle(color: Colors.black),
@@ -45,7 +47,7 @@ class SearchService {
           product.category
         ],
         builder: (product) {
-          final _format = NumberFormat('##, ##, ##0');
+          final _format = NumberFormat('##,##,##0');
           var price = int.parse(product.price);
           String _formattedPrice = '\$ ${_format.format(price)}';
 

@@ -26,10 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.grey.shade100,
       resizeToAvoidBottomInset: false,
       appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(56.0),
-        child: SafeArea(
-          child: CustomAppBar(),
-        ),
+        preferredSize: Size.fromHeight(100.0),
+        child: CustomAppBar(),
       ),
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),

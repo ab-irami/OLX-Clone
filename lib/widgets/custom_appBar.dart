@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_app/provider/product_provider.dart';
-import 'package:ecom_app/screens/home_screen.dart';
 import 'package:ecom_app/screens/location_screen.dart';
+import 'package:ecom_app/screens/main_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:ecom_app/services/search_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +21,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   final SearchService _searchService = SearchService();
 
   String _address = '';
-  late DocumentSnapshot sellerDetails;
+  DocumentSnapshot? sellerDetails;
 
   @override
   void initState() {
@@ -107,7 +107,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             context,
             MaterialPageRoute(
               builder: (BuildContext context) => const LocationScreen(
-                popScreen: HomeScreen.id,
+                popScreen: MainScreen.id,
               ),
             ),
           );
@@ -144,48 +144,45 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
       ),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: InkWell(
-          onTap: () {},
-          child: Container(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 40.0,
-                      child: TextField(
-                        onTap: () {
-                          _searchService.search(
-                            context: context,
-                            productList: _products,
-                            address: _address,
-                            provider: _provider,
-                            sellerDetails: sellerDetails,
-                          );
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search),
-                          labelText: 'Find Cars, Mobiles and many more',
-                          labelStyle: const TextStyle(
-                            fontSize: 12.0,
-                          ),
-                          contentPadding:
-                              const EdgeInsets.only(left: 10.0, right: 10.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                          ),
+        preferredSize: const Size.fromHeight(50),
+        child: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40.0,
+                    child: TextField(
+                      onTap: () {
+                        _searchService.search(
+                          context: context,
+                          productList: _products,
+                          address: _address,
+                          provider: _provider,
+                          sellerDetails: sellerDetails,
+                        );
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        labelText: 'Find Cars, Mobiles and many more',
+                        labelStyle: const TextStyle(
+                          fontSize: 12.0,
+                        ),
+                        contentPadding:
+                            const EdgeInsets.only(left: 10.0, right: 10.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6.0),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10.0),
-                  const Icon(Icons.notifications_none),
-                  const SizedBox(width: 10.0),
-                ],
-              ),
+                ),
+                const SizedBox(width: 10.0),
+                const Icon(Icons.notifications_none),
+                const SizedBox(width: 10.0),
+              ],
             ),
           ),
         ),

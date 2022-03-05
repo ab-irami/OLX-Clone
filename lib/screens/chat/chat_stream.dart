@@ -19,8 +19,8 @@ class ChatStream extends StatefulWidget {
 
 class _ChatStreamState extends State<ChatStream> {
   final FirebaseService _service = FirebaseService();
-  late Stream<QuerySnapshot<Object?>>? chatMessageStream;
-  late DocumentSnapshot chatDoc;
+  Stream<QuerySnapshot<Object?>>? chatMessageStream;
+  DocumentSnapshot? chatDoc;
   final _format = NumberFormat('##, ##, ##0');
 
   @override
@@ -73,14 +73,14 @@ class _ChatStreamState extends State<ChatStream> {
                         leading: Container(
                           width: 68,
                           height: 68,
-                          child: Image.network(chatDoc['product']['productImage']),
+                          child: Image.network(chatDoc?['product']['productImage']),
                         ),
                         title: Text(
-                            '\$ ${_priceFormatted(chatDoc['product']['title'])}'),
+                            '\$ ${_priceFormatted(chatDoc?['product']['title'])}'),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(chatDoc['product']['price']),
+                            Text(chatDoc?['product']['price']),
                             const SizedBox(width: 100),
                           ],
                         ),
@@ -97,6 +97,7 @@ class _ChatStreamState extends State<ChatStream> {
 
                             String lastChatDate;
                             var _date = DateFormat.yMMMd().format(
+
                                 DateTime.fromMicrosecondsSinceEpoch(
                                     snapshot.data!.docs[index]['time']));
                             var _today = DateFormat.yMMMd().format(

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:ecom_app/model/pop_up_menu_model.dart';
+import 'package:ecom_app/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geocode;
@@ -8,18 +9,15 @@ import 'package:geocoding/geocoding.dart' as geocode;
 class FirebaseService {
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  CollectionReference categories =
-      FirebaseFirestore.instance.collection('categories');
-  CollectionReference products =
-      FirebaseFirestore.instance.collection('products');
-  CollectionReference messages =
-      FirebaseFirestore.instance.collection('messages');
+  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
+  CollectionReference products = FirebaseFirestore.instance.collection('products');
+  CollectionReference messages = FirebaseFirestore.instance.collection('messages');
 
-  Future<void> updateUser(Map<String, dynamic> data, context, screen) {
+  Future<void> updateUser(Map<String, dynamic> data, context) {
     return users
         .doc(user?.uid)
         .update(data)
-        .then((value) => Navigator.pushReplacementNamed(context, screen))
+        .then((value) => Navigator.pushReplacementNamed(context, MainScreen.id))
         .catchError((error) {
       print('Firebase_service - $error');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,11 +32,13 @@ class FirebaseService {
     List<geocode.Placemark> placemarks =
         await geocode.placemarkFromCoordinates(lat, long);
 
-    String? name = placemarks[0].name;
+    String? street = placemarks[0].street;
     String? locality = placemarks[0].locality;
-    String? country = placemarks[0].country;
+    String? subAdministrativeArea = placemarks[0].subAdministrativeArea;
+    String? administrativeArea = placemarks[0].administrativeArea;
 
-    var userSelectedLocation = '$name, $locality, $country';
+    var userSelectedLocation =
+        '$street, $locality, $subAdministrativeArea, $administrativeArea';
 
     return userSelectedLocation;
   }
@@ -166,14 +166,20 @@ class FirebaseService {
         'favourite': FieldValue.arrayUnion([user!.uid])
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Added to my favourites'))
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('Added to my favourites'),
+        ),
       );
     } else {
       products.doc(productId).update({
         'favourite': FieldValue.arrayRemove([user!.uid])
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Removed from favourites'))
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('Removed from favourites'),
+        ),
       );
     }
   }

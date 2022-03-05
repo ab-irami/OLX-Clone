@@ -14,7 +14,7 @@ class MyAdScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FirebaseService _service = FirebaseService();
-    final _format = NumberFormat('##, ##, ##0');
+    final _format = NumberFormat('##,##,##0');
 
     String _formattedKm(km) {
       var _km = int.parse(km);
@@ -89,7 +89,8 @@ class MyAdScreen extends StatelessWidget {
                         child: Center(
                           child: LinearProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor),
+                              Theme.of(context).primaryColor,
+                            ),
                             backgroundColor: Colors.grey.shade100,
                           ),
                         ),
@@ -144,7 +145,7 @@ class MyAdScreen extends StatelessWidget {
                               maxCrossAxisExtent: 200.0,
                               childAspectRatio: 2 / 3,
                               crossAxisSpacing: 8.8,
-                              mainAxisExtent: 10.0,
+                              mainAxisSpacing: 10.0,
                             ),
                             itemCount: snapshot.data!.size,
                             itemBuilder: (BuildContext context, int index) {
@@ -207,8 +208,7 @@ class MyAdScreen extends StatelessWidget {
                             const SizedBox(height: 10.0),
                             ElevatedButton(
                               onPressed: () {
-                                Navigator.pushNamed(
-                                    context, MainScreen.id);
+                                Navigator.pushNamed(context, MainScreen.id);
                               },
                               child: const Text('Add Favourites'),
                               style: ButtonStyle(
@@ -243,7 +243,7 @@ class MyAdScreen extends StatelessWidget {
                               maxCrossAxisExtent: 200.0,
                               childAspectRatio: 2 / 3,
                               crossAxisSpacing: 8.8,
-                              mainAxisExtent: 10.0,
+                              mainAxisSpacing: 10.0,
                             ),
                             itemCount: snapshot.data!.size,
                             itemBuilder: (BuildContext context, int index) {

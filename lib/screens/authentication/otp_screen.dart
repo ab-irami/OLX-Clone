@@ -28,28 +28,23 @@ class _OTPScreenState extends State<OTPScreen> {
   var _text5 = TextEditingController();
   var _text6 = TextEditingController();
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
   Future<void> phoneCredential(BuildContext context, String otp) async {
-    print('cred function called');
-    FirebaseAuth _auth = FirebaseAuth.instance;
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: widget.verId, smsCode: otp);
-
       final User? user = (await _auth.signInWithCredential(credential)).user;
-      print('otp screen - $user ${user?.uid}');
-      if (user != null) {
-        print('user added');
-        _services.addUser(context, user.uid);
-      } else {
-        if (mounted) {
-          setState(() {
-            error = 'Login Failed';
-          });
+        if (user != null) {
+          _services.addUser(context, user.uid);
+        } else {
+          if (mounted) {
+            setState(() {
+              error = 'Login Failed';
+            });
+          }
         }
-      }
     } catch (e) {
-      print(e.toString());
-
+      print('err ${e.toString()}');
       if (mounted) {
         setState(() {
           error = 'Invalid OTP';

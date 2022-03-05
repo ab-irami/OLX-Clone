@@ -27,13 +27,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   Provider.debugCheckInvalidValueType = null;
   runApp(
     MultiProvider(
       providers: [
-        Provider (create: (_) => CategoryProvider()),
-        Provider (create: (_) => ProductProvider()),
+        Provider(create: (_) => CategoryProvider()),
+        Provider(create: (_) => ProductProvider()),
       ],
       child: const MyApp(),
     ),
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Lato',
       ),
       routes: {
-        SplashScreen.id:(context) => const SplashScreen(),
+        SplashScreen.id: (context) => const SplashScreen(),
         LoginScreen.id: (context) => const LoginScreen(),
         PhoneAuthScreen.id: (context) => const PhoneAuthScreen(),
         LocationScreen.id: (context) => const LocationScreen(),
@@ -70,11 +71,11 @@ class MyApp extends StatelessWidget {
         SellerCategoryListScreen.id: (context) => const SellerCategoryListScreen(),
         SellerSubCatListScreen.id: (context) => const SellerSubCatListScreen(),
         SellerCarForm.id: (context) => const SellerCarForm(),
-        ImagePickerWidget.id :(context) => const ImagePickerWidget(),
-        UserReviewScreen.id :(context) => const UserReviewScreen(),
-        FormsScreen.id :(context) => const FormsScreen(),
-        ProductDetailsScreen.id :(context) => const ProductDetailsScreen(),
-        ProductByCategoryScreen.id:(context) => const ProductByCategoryScreen(),
+        ImagePickerWidget.id: (context) => const ImagePickerWidget(),
+        UserReviewScreen.id: (context) => const UserReviewScreen(),
+        FormsScreen.id: (context) => const FormsScreen(),
+        ProductDetailsScreen.id: (context) => const ProductDetailsScreen(),
+        ProductByCategoryScreen.id: (context) => const ProductByCategoryScreen(),
       },
     );
   }

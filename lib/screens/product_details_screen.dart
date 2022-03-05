@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecom_app/screens/chat/chat_conversation_screen.dart';
@@ -23,20 +25,22 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool _loading = true;
-  int _index = 0;
-  final _format = NumberFormat('##, ##, ##0');
+  int? _index = 0;
+  final _format = NumberFormat('##,##,##0');
   List fav = [];
   bool isLiked = false;
 
-  late GoogleMapController _mapController;
+  GoogleMapController? _mapController;
   final FirebaseService _service = FirebaseService();
 
   @override
   void initState() {
     Timer(const Duration(seconds: 2), () {
-      setState(() {
-        _loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
     });
     super.initState();
   }
@@ -103,7 +107,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   getFavourites(ProductProvider _productProvider) {
     _service.products.doc(_productProvider.productData.id).get().then((value) {
       setState(() {
-        fav = value['favourites'];
+        fav = value['favourite'];
       });
       if (fav.contains(_service.user!.uid)) {
         setState(() {
@@ -248,7 +252,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                 ),
                                 if (data['category'] == 'Cars')
-                                  Text('(${(data['year'])})'),
+                                  Text('(${data['year']})'),
                               ],
                             ),
                             const SizedBox(height: 30),
@@ -325,8 +329,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       ),
                                       const Divider(color: Colors.grey),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 12.0, right: 12.0),
+                                        padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
@@ -340,47 +343,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                 ),
                                                 const SizedBox(width: 10),
                                                 Text(
-                                                  data['no. of owners'],
+                                                  data['noOfOwners'],
                                                   style: const TextStyle(
                                                     fontSize: 12.0,
                                                   ),
                                                 ),
                                               ],
                                             ),
+                                            
                                             const SizedBox(width: 20.0),
-                                            Expanded(
-                                              child: Container(
-                                                child: AbsorbPointer(
-                                                  absorbing: true,
-                                                  child: TextButton.icon(
-                                                    onPressed: () {},
-                                                    style: const ButtonStyle(
-                                                      alignment:
-                                                          Alignment.center,
-                                                    ),
-                                                    icon: const Icon(
-                                                      Icons
-                                                          .location_on_outlined,
-                                                      size: 12.0,
-                                                      color: Colors.black,
-                                                    ),
-                                                    label: Flexible(
-                                                      child: Text(
-                                                        _productProvider.sellerDetails == null
-                                                            ? ''
-                                                            : _productProvider
-                                                                    .sellerDetails[
-                                                                'address'],
-                                                        maxLines: 1,
-                                                        style: const TextStyle(
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
                                             Container(
                                               child: Column(
                                                 crossAxisAlignment:
@@ -538,15 +509,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         zoom: 15,
                                       ),
                                       mapType: MapType.normal,
-                                      onMapCreated:
-                                          (GoogleMapController mapController) {
+                                      onMapCreated: (mapController) {
                                         setState(() {
                                           _mapController = mapController;
                                         });
                                       },
                                     ),
                                   ),
-                                  const Center(child: Icon(Icons.location_on, size: 35)),
+                                  const Center(
+                                      child: Icon(Icons.location_on, size: 35)),
                                   const Center(
                                     child: CircleAvatar(
                                       radius: 40,
@@ -614,7 +585,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        //mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
                           Icon(

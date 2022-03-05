@@ -76,7 +76,7 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     if (widget.popScreen == null) {
       _service.users
           .doc(_service.user!.uid)
@@ -102,6 +102,11 @@ class _LocationScreenState extends State<LocationScreen> {
         _loading = false;
       });
     }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ProgressDialog progressDialog = ProgressDialog(
       context: context,
       backgroundColor: Colors.white,
@@ -174,11 +179,15 @@ class _LocationScreenState extends State<LocationScreen> {
                         progressDialog.show();
                         getLocation().then((value) {
                           if (value != null) {
-                            _service.updateUser({
-                              'location':
-                                  GeoPoint(value.latitude!, value.longitude!),
-                              'address': _address,
-                            }, context, widget.popScreen).then((value) {
+                            _service.updateUser(
+                              {
+                                'location':
+                                    GeoPoint(value.latitude!, value.longitude!),
+                                'address': _address,
+                              },
+                              context,
+                              //widget.popScreen,
+                            ).then((value) {
                               progressDialog.dismiss();
                             });
                           }
@@ -245,12 +254,15 @@ class _LocationScreenState extends State<LocationScreen> {
                           });
 
                           if (value != null) {
-                            _service.updateUser({
-                              'address': manualAddress,
-                              'state': stateValue,
-                              'city': cityValue,
-                              'country': countryValue,
-                            }, context, widget.popScreen);
+                            _service.updateUser(
+                              {
+                                'address': manualAddress,
+                                'state': stateValue,
+                                'city': cityValue,
+                                'country': countryValue,
+                              },
+                              context,
+                            ); //widget.popScreen
                           }
                         },
                       ),
@@ -293,10 +305,14 @@ class _LocationScreenState extends State<LocationScreen> {
               const SizedBox(height: 30.0),
               _loading
                   ? Column(
-                      children: const [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 8.0),
-                        Text('Finding location..'),
+                      children: [
+                        CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 8.0),
+                        const Text('Finding location..'),
                       ],
                     )
                   : Column(
@@ -337,10 +353,10 @@ class _LocationScreenState extends State<LocationScreen> {
                                                     'location': GeoPoint(
                                                       value.latitude!,
                                                       value.longitude!,
-                                                    )
+                                                    ),
                                                   },
                                                   context,
-                                                  widget.popScreen,
+                                                  //widget.popScreen,
                                                 );
                                               }
                                             },

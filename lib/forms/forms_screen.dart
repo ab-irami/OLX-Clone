@@ -3,7 +3,6 @@ import 'package:ecom_app/forms/user_review_screen.dart';
 import 'package:ecom_app/provider/cat_provider.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:ecom_app/widgets/image_picker_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:galleryimage/galleryimage.dart';
 import 'package:provider/provider.dart';
@@ -221,7 +220,7 @@ class _FormsScreenState extends State<FormsScreen> {
                         InkWell(
                           onTap: () {
                             showFormDialog(
-                                _formClass.numbers, _bedroomsController);
+                                _formClass.numbers, _bedroomsController,);
                           },
                           child: TextFormField(
                             controller: _bedroomsController,
@@ -352,7 +351,7 @@ class _FormsScreenState extends State<FormsScreen> {
                     color: Colors.grey.shade300,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: (_provider.listUrls.isNotEmpty)
+                  child: (_provider.listUrls.isEmpty)
                       ? const Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(

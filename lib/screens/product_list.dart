@@ -16,7 +16,7 @@ class ProductList extends StatelessWidget {
     final FirebaseService _service = FirebaseService();
     var _catProvider = Provider.of<CategoryProvider>(context);
 
-    final _format = NumberFormat('##, ##, ##0');
+    final _format = NumberFormat('##,##,##0');
 
     String _formattedKm(km) {
       var _km = int.parse(km);
@@ -91,7 +91,7 @@ class ProductList extends StatelessWidget {
                     maxCrossAxisExtent: 200.0,
                     childAspectRatio: 2 / 3,
                     crossAxisSpacing: 8.8,
-                    mainAxisExtent: 10.0,
+                    mainAxisSpacing: 10.0,
                   ),
                   itemCount: snapshot.data!.size,
                   itemBuilder: (BuildContext context, int index) {

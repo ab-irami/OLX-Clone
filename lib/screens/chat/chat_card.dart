@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecom_app/model/pop_up_menu_model.dart';
 import 'package:ecom_app/screens/chat/chat_conversation_screen.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 
 class ChatCard extends StatefulWidget {
   const ChatCard({Key? key, required this.chatData}) : super(key: key);
@@ -17,7 +15,7 @@ class ChatCard extends StatefulWidget {
 
 class _ChatCardState extends State<ChatCard> {
   final FirebaseService _service = FirebaseService();
-  late DocumentSnapshot? doc;
+  DocumentSnapshot? doc;
   String _lastChatDate = '';
 
   @override

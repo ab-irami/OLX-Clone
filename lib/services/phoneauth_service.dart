@@ -9,17 +9,16 @@ import 'package:flutter/material.dart';
 class PhoneAuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> addUser(context, uid) async {
-    print('phone auth service $user, ${user?.uid}');
+    print('add user called');
+    User? user = FirebaseAuth.instance.currentUser;
     final QuerySnapshot result =
         await users.where('uid', isEqualTo: user?.uid).get();
 
     List<DocumentSnapshot> document = result.docs;
-
     if (document.isNotEmpty) {
-      Navigator.pushReplacementNamed(context, LocationScreen.id);
+        Navigator.pushReplacementNamed(context, LocationScreen.id);
     } else {
       return users.doc(user?.uid).set({
         'uid': user?.uid,
@@ -28,7 +27,9 @@ class PhoneAuthService {
         'name': null,
         'address': null,
       }).then((value) {
-        Navigator.pushReplacementNamed(context, LocationScreen.id);
+        auth.authStateChanges().listen((value) {
+          Navigator.pushReplacementNamed(context, LocationScreen.id);
+        });
       }).catchError((error) => print("Failed to add user: $error"));
     }
   }
@@ -36,7 +37,11 @@ class PhoneAuthService {
   Future<void> verifyPhoneNumber(BuildContext context, number) async {
     final PhoneVerificationCompleted verificationCompleted =
         (PhoneAuthCredential credential) async {
-      await auth.signInWithCredential(credential);
+      UserCredential result = await auth.signInWithCredential(credential);
+      User? user = result.user;
+      if (user != null) {
+        addUser(context, user.uid);
+      }
     };
 
     final PhoneVerificationFailed verificationFailed =
@@ -65,7 +70,7 @@ class PhoneAuthService {
         verificationCompleted: verificationCompleted,
         verificationFailed: verificationFailed,
         codeSent: codeSent,
-        timeout: const Duration(seconds: 30),
+        timeout: const Duration(seconds: 60),
         codeAutoRetrievalTimeout: (String verificationId) {
           print(verificationId);
         },

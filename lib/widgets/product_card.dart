@@ -24,7 +24,7 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   final FirebaseService _service = FirebaseService();
 
-  final _format = NumberFormat('##, ##, ##0');
+  final _format = NumberFormat('##,##,##0');
 
   String address = '';
   late DocumentSnapshot sellerDetails;
@@ -59,7 +59,7 @@ class _ProductCardState extends State<ProductCard> {
     _service.products.doc(widget.data.id).get().then((value) {
       if (mounted) {
         setState(() {
-          fav = value['favourites'];
+          fav = value['favourite'];
         });
       }
       if (fav.contains(_service.user!.uid)) {
