@@ -17,7 +17,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   var colorizeColors = [
     Colors.grey,
-    Colors.cyan.shade900,
+    Colors.blueAccent,
   ];
 
   var colorizeTextStyle = const TextStyle(fontSize: 30.0, fontFamily: 'Lato');
@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
             AnimatedTextKit(
               animatedTexts: [
                 ColorizeAnimatedText(
-                  'Buy & Sell',
+                  'OLX Clone',
                   textStyle: colorizeTextStyle,
                   colors: colorizeColors,
                 ),

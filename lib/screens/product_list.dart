@@ -57,13 +57,10 @@ class ProductList extends StatelessWidget {
             }
 
             if (snapshot.data!.docs.isEmpty) {
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                child: const Center(
-                  child: Text(
-                    'No products added\nunder selected Category.',
-                    textAlign: TextAlign.center,
-                  ),
+              return const Center(
+                child: Text(
+                  'No products added\nunder selected Category.',
+                  textAlign: TextAlign.center,
                 ),
               );
             }

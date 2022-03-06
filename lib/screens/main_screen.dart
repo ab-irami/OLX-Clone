@@ -172,5 +172,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-///backgroundColor for FAB purple

@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: SplashScreen.id,
       theme: ThemeData(
-        primaryColor: Colors.cyan.shade900,
+        primaryColor: Colors.blueAccent,
         fontFamily: 'Lato',
       ),
       routes: {

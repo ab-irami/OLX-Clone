@@ -136,8 +136,6 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
                                 _loading = false;
                               });
                             });
-                            //Navigator.pushReplacementNamed(
-                                //context, MainScreen.id);
                           },
                           child: const Text(
                             'Confirm',

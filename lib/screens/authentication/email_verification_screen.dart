@@ -58,8 +58,8 @@ class EmailVerificationScreen extends StatelessWidget {
                             },
                           );
                         }
-                        // Navigator.pushReplacementNamed(
-                        //     context, LocationScreen.id);
+                        Navigator.pushReplacementNamed(
+                            context, LocationScreen.id);
                       },
                       child: const Text('Verify Email'),
                     ),

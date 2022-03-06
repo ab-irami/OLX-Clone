@@ -186,7 +186,7 @@ class _LocationScreenState extends State<LocationScreen> {
                                 'address': _address,
                               },
                               context,
-                              //widget.popScreen,
+                              widget.popScreen,
                             ).then((value) {
                               progressDialog.dismiss();
                             });
@@ -262,7 +262,8 @@ class _LocationScreenState extends State<LocationScreen> {
                                 'country': countryValue,
                               },
                               context,
-                            ); //widget.popScreen
+                              widget.popScreen
+                            ); 
                           }
                         },
                       ),
@@ -356,7 +357,7 @@ class _LocationScreenState extends State<LocationScreen> {
                                                     ),
                                                   },
                                                   context,
-                                                  //widget.popScreen,
+                                                  widget.popScreen,
                                                 );
                                               }
                                             },

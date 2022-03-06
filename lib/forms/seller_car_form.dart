@@ -487,6 +487,3 @@ class _SellerCarFormState extends State<SellerCarForm> {
     );
   }
 }
-
-
-///automatic image not loading & showing in image widget

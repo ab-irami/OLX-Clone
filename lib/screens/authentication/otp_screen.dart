@@ -302,6 +302,3 @@ class _OTPScreenState extends State<OTPScreen> {
     );
   }
 }
-
-
-//otp screen bug phone verification

@@ -53,8 +53,10 @@ class _ChatConversationsState extends State<ChatConversations> {
       body: Container(
         child: Stack(
           children: [
-            ChatStream(
-              chatRoomId: widget.chatRoomId,
+            Expanded(
+              child: ChatStream(
+                chatRoomId: widget.chatRoomId,
+              ),
             ),
             Container(
               alignment: Alignment.bottomCenter,

@@ -103,18 +103,3 @@ class PasswordResetScreen extends StatelessWidget {
     );
   }
 }
-
-
-// onChanged: (value) {
-//                   if (_emailController.text.isNotEmpty) {
-//                     if (value.length > 3) {
-//                       setState(() {
-//                         _validate = true;
-//                       });
-//                     } else {
-//                       setState(() {
-//                         _validate = false;
-//                       });
-//                     }
-//                   }
-//                 },

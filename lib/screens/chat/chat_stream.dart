@@ -21,7 +21,7 @@ class _ChatStreamState extends State<ChatStream> {
   final FirebaseService _service = FirebaseService();
   Stream<QuerySnapshot<Object?>>? chatMessageStream;
   DocumentSnapshot? chatDoc;
-  final _format = NumberFormat('##, ##, ##0');
+  final _format = NumberFormat('##,##,##0');
 
   @override
   void initState() {
@@ -73,95 +73,96 @@ class _ChatStreamState extends State<ChatStream> {
                         leading: Container(
                           width: 68,
                           height: 68,
-                          child: Image.network(chatDoc?['product']['productImage']),
+                          child: Image.network(
+                            chatDoc?['product']['productImage'],
+                          ),
                         ),
                         title: Text(
-                            '\$ ${_priceFormatted(chatDoc?['product']['title'])}'),
+                          chatDoc?['product']['title'],
+                        ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(chatDoc?['product']['price']),
-                            const SizedBox(width: 100),
+                            Text('\$ ${_priceFormatted(chatDoc?['product']['price'])}'),
+                            const SizedBox(width: 20.0,),
                           ],
                         ),
                       ),
                     Expanded(
-                      child: Container(
-                        color: Colors.grey.shade300,
-                        child: ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, int index) {
-                            String sentBy =
-                                snapshot.data!.docs[index]['sentBy'];
-                            String me = _service.user!.uid;
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, int index) {
+                          String sentBy = snapshot.data!.docs[index]['sentBy'];
+                          String me = _service.user!.uid;
 
-                            String lastChatDate;
-                            var _date = DateFormat.yMMMd().format(
+                          String lastChatDate;
+                          var _date = DateFormat.yMMMd().format(
+                              DateTime.fromMicrosecondsSinceEpoch(
+                                  snapshot.data!.docs[index]['time']));
 
+                          var _today = DateFormat.yMMMd().format(
+                              DateTime.fromMicrosecondsSinceEpoch(
+                                  DateTime.now().microsecondsSinceEpoch));
+
+                          if (_date == _today) {
+                            lastChatDate = DateFormat('hh:mm').format(
                                 DateTime.fromMicrosecondsSinceEpoch(
                                     snapshot.data!.docs[index]['time']));
-                            var _today = DateFormat.yMMMd().format(
-                                DateTime.fromMicrosecondsSinceEpoch(
-                                    DateTime.now().microsecondsSinceEpoch));
-
-                            if (_date == _today) {
-                              lastChatDate = DateFormat('hh:mm').format(
-                                  DateTime.fromMicrosecondsSinceEpoch(
-                                      snapshot.data!.docs[index]['time']));
-                            } else {
-                              lastChatDate = _date.toString();
-                            }
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  ChatBubble(
-                                    alignment: sentBy == me
-                                        ? Alignment.centerRight
-                                        : Alignment.centerLeft,
-                                    backGroundColor: sentBy == me
-                                        ? Theme.of(context).primaryColor
-                                        : Colors.grey,
-                                    child: Container(
-                                      constraints: BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
-                                      ),
-                                      child: Text(
-                                        snapshot.data!.docs[index]['message'],
-                                        style: TextStyle(
-                                          color: sentBy == me
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                      ),
+                          } else {
+                            lastChatDate = _date.toString();
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                ChatBubble(
+                                  alignment: sentBy == me
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
+                                  backGroundColor: sentBy == me
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey,
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.8,
                                     ),
-                                    clipper: ChatBubbleClipper2(
-                                      type: sentBy == me
-                                          ? BubbleType.sendBubble
-                                          : BubbleType.receiverBubble,
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: sentBy == me
-                                        ? Alignment.centerRight
-                                        : Alignment.centerLeft,
                                     child: Text(
-                                      lastChatDate,
-                                      style: const TextStyle(fontSize: 12.0),
+                                      snapshot.data!.docs[index]['message'],
+                                      style: TextStyle(
+                                        color: sentBy == me
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                                  clipper: ChatBubbleClipper2(
+                                    type: sentBy == me
+                                        ? BubbleType.sendBubble
+                                        : BubbleType.receiverBubble,
+                                  ),
+                                ),
+                                Align(
+                                  alignment: sentBy == me
+                                      ? Alignment.centerRight
+                                      : Alignment.centerLeft,
+                                  child: Text(
+                                    lastChatDate,
+                                    style: const TextStyle(fontSize: 12.0),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],
                 )
-              : Container();
+              : const Center(
+                child: Text('You have no data :('),
+              );
         },
       ),
     );

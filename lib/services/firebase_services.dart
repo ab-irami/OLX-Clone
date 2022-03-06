@@ -13,11 +13,11 @@ class FirebaseService {
   CollectionReference products = FirebaseFirestore.instance.collection('products');
   CollectionReference messages = FirebaseFirestore.instance.collection('messages');
 
-  Future<void> updateUser(Map<String, dynamic> data, context) {
+  Future<void> updateUser(Map<String, dynamic> data, context, screen) {
     return users
         .doc(user?.uid)
         .update(data)
-        .then((value) => Navigator.pushReplacementNamed(context, MainScreen.id))
+        .then((value) => Navigator.pushReplacementNamed(context, screen ?? MainScreen.id))
         .catchError((error) {
       print('Firebase_service - $error');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -90,8 +90,7 @@ class FirebaseService {
   popUpMenu(chatData, context) {
     final CustomPopupMenuController _controller = CustomPopupMenuController();
     List<PopupMenuModel> menuItems = [
-      PopupMenuModel('Delete Chat', Icons.delete),
-      PopupMenuModel('Mark as Sold', Icons.done),
+      PopupMenuModel('Delete Chat', Icons.delete)
     ];
     return CustomPopupMenu(
       child: Container(
@@ -115,6 +114,7 @@ class FirebaseService {
                           _controller.hideMenu();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
+                              behavior: SnackBarBehavior.floating,
                               content: Text('Chat deleted'),
                             ),
                           );
