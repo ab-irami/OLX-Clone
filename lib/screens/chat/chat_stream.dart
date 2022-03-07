@@ -94,16 +94,16 @@ class _ChatStreamState extends State<ChatStream> {
                         itemBuilder: (context, int index) {
                           String sentBy = snapshot.data!.docs[index]['sentBy'];
                           String me = _service.user!.uid;
-
+                    
                           String lastChatDate;
                           var _date = DateFormat.yMMMd().format(
                               DateTime.fromMicrosecondsSinceEpoch(
                                   snapshot.data!.docs[index]['time']));
-
+                    
                           var _today = DateFormat.yMMMd().format(
                               DateTime.fromMicrosecondsSinceEpoch(
                                   DateTime.now().microsecondsSinceEpoch));
-
+                    
                           if (_date == _today) {
                             lastChatDate = DateFormat('hh:mm').format(
                                 DateTime.fromMicrosecondsSinceEpoch(
@@ -168,3 +168,6 @@ class _ChatStreamState extends State<ChatStream> {
     );
   }
 }
+
+
+///91

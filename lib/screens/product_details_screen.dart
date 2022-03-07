@@ -148,18 +148,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
             onPressed: () {},
           ),
-          Positioned(
-            right: 0.0,
-            child: IconButton(
-              icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
-              color: isLiked ? Colors.red : Colors.black,
-              onPressed: () {
-                setState(() {
-                  isLiked = !isLiked;
-                });
-                _service.updateFavourite(isLiked, data.id, context);
-              },
-            ),
+          IconButton(
+            icon: Icon(isLiked ? Icons.favorite : Icons.favorite_border),
+            color: isLiked ? Colors.red : Colors.black,
+            onPressed: () {
+              setState(() {
+                isLiked = !isLiked;
+              });
+              _service.updateFavourite(isLiked, data.id, context);
+            },
           ),
         ],
       ),
@@ -577,35 +574,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: _productProvider.productData['sellerUid'] == _service.user!.uid
-              ? Expanded(
-                  child: NeumorphicButton(
-                    onPressed: () {},
-                    style:
-                        NeumorphicStyle(color: Theme.of(context).primaryColor),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
-                        //mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.edit,
-                            size: 16.0,
-                            color: Colors.white,
-                          ),
-                          SizedBox(width: 10.0),
-                          Text(
-                            'Edit Product',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+              ? NeumorphicButton(
+                onPressed: () {},
+                style:
+                    NeumorphicStyle(color: Theme.of(context).primaryColor),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.edit,
+                        size: 16.0,
+                        color: Colors.white,
                       ),
-                    ),
+                      SizedBox(width: 10.0),
+                      Text(
+                        'Edit Product',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                )
+                ),
+              )
               : Row(
                   children: [
                     Expanded(

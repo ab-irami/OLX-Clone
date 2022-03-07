@@ -49,47 +49,45 @@ class SellerCategoryListScreen extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var doc = snapshot.data!.docs[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        onTap: () {
-                          _catProvider.getCategory(doc['catName']);
-                          _catProvider.getCatSnapShot(doc);
-                          if (doc['subCat'] == null) {
-                            Navigator.pushNamed(context, SellerCarForm.id);
-                          } else {
-                            Navigator.pushNamed(
-                              context,
-                              SellerSubCatListScreen.id,
-                              arguments: doc,
-                            );
-                          }
-                        },
-                        leading: Image.network(
-                          doc['image'],
-                          width: 40.0,
-                        ),
-                        title: Text(
-                          doc['catName'],
-                          style: const TextStyle(
-                            fontSize: 15.0,
-                          ),
-                        ),
-                        trailing: doc['subCat'] == null
-                            ? null
-                            : const Icon(
-                                Icons.arrow_forward_ios,
-                                size: 12.0,
-                              ),
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var doc = snapshot.data!.docs[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      onTap: () {
+                        _catProvider.getCategory(doc['catName']);
+                        _catProvider.getCatSnapShot(doc);
+                        if (doc['subCat'] == null) {
+                          Navigator.pushNamed(context, SellerCarForm.id);
+                        } else {
+                          Navigator.pushNamed(
+                            context,
+                            SellerSubCatListScreen.id,
+                            arguments: doc,
+                          );
+                        }
+                      },
+                      leading: Image.network(
+                        doc['image'],
+                        width: 40.0,
                       ),
-                    );
-                  },
-                ),
+                      title: Text(
+                        doc['catName'],
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                        ),
+                      ),
+                      trailing: doc['subCat'] == null
+                          ? null
+                          : const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 12.0,
+                            ),
+                    ),
+                  );
+                },
               );
             },
           ),

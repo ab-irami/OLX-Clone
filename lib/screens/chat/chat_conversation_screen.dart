@@ -1,6 +1,9 @@
+import 'package:ecom_app/provider/product_provider.dart';
 import 'package:ecom_app/screens/chat/chat_stream.dart';
 import 'package:ecom_app/services/firebase_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatConversations extends StatefulWidget {
   const ChatConversations({Key? key, this.chatRoomId}) : super(key: key);
@@ -32,8 +35,13 @@ class _ChatConversationsState extends State<ChatConversations> {
     }
   }
 
+  _callSeller(number) {
+    launch(number);
+  }
+
   @override
   Widget build(BuildContext context) {
+    var _productProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -43,7 +51,11 @@ class _ChatConversationsState extends State<ChatConversations> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _callSeller(
+                'tel:${_productProvider.sellerDetails['mobile']}',
+              );
+            },
             icon: const Icon(Icons.call),
           ),
           _service.popUpMenu(widget.chatRoomId, context),
@@ -51,7 +63,7 @@ class _ChatConversationsState extends State<ChatConversations> {
         shape: const Border(bottom: BorderSide(color: Colors.grey)),
       ),
       body: Container(
-        child: Stack(
+        child: Column(
           children: [
             Expanded(
               child: ChatStream(

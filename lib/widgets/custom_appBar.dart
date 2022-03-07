@@ -26,7 +26,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     _service.products.get().then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         setState(() {
           _products.add(
             Products(
@@ -41,7 +41,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           );
           getSellerAddress(doc['sellerUid']);
         });
-      });
+      }
     });
     super.initState();
   }

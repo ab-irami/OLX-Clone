@@ -10,7 +10,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.cyan.shade900,
+      backgroundColor: Colors.blueAccent,
       body: Column(
         children: [
           Expanded(
@@ -28,12 +28,12 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(
                     height: 10.0,
                   ),
-                  Text(
-                    'Buy & Sell',
+                  const Text(
+                    'OLX Clone',
                     style: TextStyle(
                       fontSize: 30.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.cyan.shade900,
+                      color: Colors.blueAccent,
                     ),
                   ),
                 ],
